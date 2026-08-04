@@ -1,0 +1,8 @@
+{
+  "appId": "com.chrismutter.truthorsip",
+  "appName": "Truth or Sip",
+  "webDir": "www",
+  "backgroundColor": "#0E0710",
+  "android": { "allowMixedContent": false },
+  "plugins": { "SplashScreen": { "launchShowDuration": 1200, "backgroundColor": "#0E0710", "showSpinner": false } }
+}

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Truth or Sip</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Karla:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0E0710;
+    --ink-2:#1C0F1F;
+    --wine:#E4405F;
+    --wine-deep:#7A1F3D;
+    --gold:#F5B841;
+    --cream:#F7ECE4;
+    --white:#FFFFFF;
+    --muted:rgba(247,236,228,.60);
+    --radius:22px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    overscroll-behavior:none;-webkit-user-select:none;user-select:none;touch-action:manipulation;
+    font-family:'Karla',sans-serif;background:var(--ink);color:var(--cream);overflow:hidden;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(228,64,95,.28), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(122,31,61,.34), transparent 48%);
+  }
+  .app{max-width:430px;height:100dvh;margin:0 auto;position:relative;display:flex;flex-direction:column;}
+  .screen{position:absolute;inset:0;display:none;flex-direction:column;padding:28px 22px;overflow-y:auto;}
+  .screen.active{display:flex;animation:pop .28s ease;}
+  @keyframes pop{from{opacity:0;transform:scale(.97);}to{opacity:1;transform:scale(1);}}
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important;}}
+
+  h1,h2,.display{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.01em;}
+  .eyebrow{font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);}
+
+  .btn{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.04em;border:none;
+    border-radius:999px;cursor:pointer;padding:18px 28px;font-size:20px;color:var(--ink);
+    background:var(--gold);width:100%;box-shadow:0 6px 0 rgba(0,0,0,.45);
+    transition:transform .08s ease, box-shadow .08s ease;}
+  .btn:active{transform:translateY(4px);box-shadow:0 2px 0 rgba(0,0,0,.45);}
+  .btn.ghost{background:transparent;color:var(--muted);box-shadow:none;font-family:'Karla';
+    font-weight:700;font-size:14px;letter-spacing:.06em;padding:12px;}
+  .btn.wine{background:var(--wine);color:#fff;}
+
+  /* ---------- TITLE ---------- */
+  #title{justify-content:center;text-align:center;}
+  .logo{font-family:'Anton';font-size:70px;line-height:.92;text-transform:uppercase;
+    background:linear-gradient(120deg,var(--wine),var(--gold));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 4px 0 rgba(0,0,0,.45));}
+  .logo .amp{display:block;font-size:34px;color:var(--muted);-webkit-text-fill-color:var(--muted);margin:2px 0;}
+  .tagline{font-size:17px;color:var(--muted);font-weight:600;margin-top:14px;}
+  .glass{font-size:56px;margin:8px 0 4px;}
+  .footer-note{text-align:center;font-size:11.5px;color:rgba(247,236,228,.35);font-weight:700;
+    letter-spacing:.08em;text-transform:uppercase;padding:12px 0 2px;}
+
+  /* ---------- AGE GATE ---------- */
+  #agegate{justify-content:center;text-align:center;}
+  .agewarn{background:var(--ink-2);border:1px solid rgba(247,236,228,.14);border-radius:16px;
+    padding:18px;font-size:14.5px;font-weight:600;color:var(--muted);line-height:1.55;margin:18px 0;text-align:left;}
+  .agewarn b{color:var(--cream);}
+
+  /* ---------- SETUP ---------- */
+  .setup-hint{color:var(--muted);font-weight:600;font-size:14px;margin-top:6px;}
+  .field{margin-top:20px;}
+  .field label{display:block;font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:8px;}
+  .player-row{display:flex;gap:10px;margin-bottom:10px;align-items:center;}
+  .player-row input{flex:1;background:var(--ink-2);border:2px solid rgba(247,236,228,.14);border-radius:14px;
+    padding:14px 16px;color:var(--cream);font-family:'Karla';font-weight:700;font-size:16px;outline:none;}
+  .player-row input:focus{border-color:var(--gold);}
+  .player-row .remove{flex:none;width:42px;height:42px;border-radius:12px;border:none;cursor:pointer;
+    background:var(--ink-2);color:var(--muted);font-size:20px;}
+  .add-player{width:100%;margin-top:4px;background:transparent;border:2px dashed rgba(247,236,228,.2);
+    border-radius:14px;padding:13px;color:var(--gold);font-family:'Karla';font-weight:800;font-size:14px;
+    letter-spacing:.04em;cursor:pointer;}
+  .pillrow{display:flex;gap:10px;}
+  .pill{flex:1;padding:13px;border-radius:14px;border:2px solid rgba(247,236,228,.14);background:var(--ink-2);
+    color:var(--muted);font-weight:800;font-size:15px;cursor:pointer;text-align:center;}
+  .pill.sel{border-color:var(--gold);color:var(--gold);}
+  .setup-warn{color:var(--wine);font-weight:700;font-size:13.5px;text-align:center;margin:10px 0 0;min-height:1px;}
+
+  /* ---------- CATEGORY SELECT ---------- */
+  .cat-grid{display:grid;gap:12px;margin-top:16px;}
+  .cat{position:relative;border-radius:var(--radius);padding:16px 18px;cursor:pointer;border:none;text-align:left;
+    background:var(--ink-2);border:1px solid rgba(247,236,228,.1);color:var(--cream);display:flex;align-items:center;gap:14px;}
+  .cat.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold);}
+  .cat .cemoji{font-size:30px;flex:none;}
+  .cat h3{font-family:'Anton';font-size:20px;text-transform:uppercase;letter-spacing:.02em;}
+  .cat p{font-weight:600;font-size:13px;color:var(--muted);margin-top:2px;}
+  .cat .lock{position:absolute;top:12px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.1em;
+    text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--wine-deep);color:#fff;}
+  .cat .check{position:absolute;top:14px;right:14px;font-size:18px;color:var(--gold);display:none;}
+  .cat.sel .check{display:block;}
+  .cat.sel .lock{display:none;}
+
+  /* ---------- PASS ---------- */
+  #pass{justify-content:center;text-align:center;}
+  #pass .display{font-size:30px;}
+  .pass-name{font-size:56px;margin:8px 0 4px;color:var(--gold);line-height:1;}
+  .phone-anim{font-size:60px;margin:20px 0;animation:wiggle 1s ease infinite;}
+  @keyframes wiggle{0%,100%{transform:rotate(-10deg);}50%{transform:rotate(10deg);}}
+  .mode-hint{margin:16px auto 26px;max-width:320px;background:var(--ink-2);border-radius:16px;
+    padding:14px 16px;font-size:14.5px;font-weight:600;color:var(--muted);line-height:1.5;}
+  .mode-hint b{color:var(--gold);}
+
+  /* ---------- PLAY ---------- */
+  #play{padding:20px 18px;}
+  .quit-btn{position:absolute;top:16px;left:16px;width:44px;height:44px;border-radius:50%;
+    background:rgba(247,236,228,.1);color:var(--cream);font-size:20px;display:grid;place-items:center;cursor:pointer;z-index:20;}
+  .hud{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px;margin-top:52px;}
+  .score-chip{background:var(--ink-2);padding:8px 14px;border-radius:999px;}
+  .card{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+    background:var(--cream);color:var(--ink);border-radius:28px;padding:30px 24px;margin:16px 0;
+    transform:rotate(-1deg);box-shadow:0 12px 0 rgba(0,0,0,.4);position:relative;overflow:hidden;}
+  .card::before{content:"";position:absolute;top:-40px;right:-40px;width:140px;height:140px;border-radius:50%;
+    background:var(--deckcolor,var(--wine));opacity:.16;}
+  .card::after{content:"";position:absolute;bottom:-50px;left:-50px;width:150px;height:150px;border-radius:50%;
+    background:var(--gold);opacity:.12;}
+  .cat-label{position:absolute;top:16px;left:18px;font-size:11px;font-weight:800;letter-spacing:.16em;
+    text-transform:uppercase;color:#9a7a6a;}
+  .cat-emoji{position:absolute;top:14px;right:18px;font-size:26px;}
+  .qtext{font-family:'Karla';font-weight:800;font-size:25px;line-height:1.3;color:var(--ink);z-index:1;}
+  .dare-tag{display:inline-block;font-family:'Anton';font-size:14px;letter-spacing:.1em;color:var(--wine);
+    margin-bottom:12px;text-transform:uppercase;}
+  .actions{display:flex;gap:12px;}
+  .actions .btn{font-size:20px;padding:20px;}
+  .btn.sip{background:var(--wine);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.5);}
+  .btn.truth{background:var(--gold);}
+  .btn.wide{width:100%;}
+
+  /* ---------- CONFIRM MODAL ---------- */
+  .modal-overlay{position:absolute;inset:0;z-index:50;display:none;background:rgba(8,4,10,.85);
+    backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:28px;}
+  .modal-overlay.show{display:flex;animation:pop .2s ease;}
+  .modal-card{background:var(--ink-2);border:1px solid rgba(247,236,228,.14);border-radius:var(--radius);
+    padding:26px 22px;text-align:center;max-width:320px;width:100%;}
+  .modal-card h3{font-family:'Anton';font-size:26px;text-transform:uppercase;}
+  .modal-card p{color:var(--muted);font-weight:600;font-size:14.5px;margin:8px 0 22px;line-height:1.5;}
+  .modal-actions{display:flex;flex-direction:column;gap:10px;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- TITLE -->
+  <section class="screen active" id="title">
+    <div class="glass">🍸</div>
+    <div class="logo">Truth<span class="amp">or</span>Sip</div>
+    <p class="tagline">Spill it or take a sip.<br>The adult party game made in 254.</p>
+    <div style="height:34px"></div>
+    <button class="btn wine" onclick="go('agegate')">Start</button>
+    <p class="footer-note">18+ · Play responsibly · v0.1</p>
+  </section>
+
+  <!-- AGE GATE -->
+  <section class="screen" id="agegate">
+    <div style="flex:1"></div>
+    <div class="glass" style="text-align:center">🔞</div>
+    <h2 class="display" style="font-size:34px;text-align:center">Adults only</h2>
+    <div class="agewarn">
+      You must be <b>18+</b> and of legal drinking age to play. Truth or Sip is about <b>sips, not shots</b> — pace yourselves, drink water, and never pressure anyone.
+      Not drinking? Switch on <b>Dares mode</b> and play completely dry.
+    </div>
+    <button class="btn" onclick="go('setup')">I'm 18+ · Continue</button>
+    <button class="btn ghost" onclick="go('title')">← Back</button>
+    <div style="flex:1"></div>
+  </section>
+
+  <!-- SETUP -->
+  <section class="screen" id="setup">
+    <p class="eyebrow">Who's playing?</p>
+    <h2 style="font-size:32px;margin-top:6px;">The circle</h2>
+    <p class="setup-hint">Add everyone. We'll pass the phone around in order.</p>
+
+    <div class="field">
+      <label>Players</label>
+      <div id="playerList"></div>
+      <button class="add-player" onclick="addPlayer()">＋ Add another player</button>
+    </div>
+
+    <div class="field">
+      <label>Mode</label>
+      <div class="pillrow">
+        <div class="pill sel" id="modeSips" onclick="setMode('sips')">🍺 Sips</div>
+        <div class="pill" id="modeDare" onclick="setMode('dare')">🎭 Dares (dry)</div>
+      </div>
+    </div>
+
+    <div style="flex:1;min-height:14px"></div>
+    <p class="setup-warn" id="setup-warn"></p>
+    <button class="btn wine" onclick="goCategories()">Next: pick topics</button>
+    <button class="btn ghost" onclick="go('agegate')">← Back</button>
+  </section>
+
+  <!-- CATEGORY SELECT -->
+  <section class="screen" id="categories">
+    <p class="eyebrow">Pick your topics</p>
+    <h2 style="font-size:30px;margin-top:6px;">What's on the table?</h2>
+    <p class="setup-hint">Tap to toggle. Mix as many as you like.</p>
+    <div class="cat-grid" id="catGrid"></div>
+    <div style="height:14px"></div>
+    <p class="setup-warn" id="cat-warn"></p>
+    <button class="btn" onclick="startGame()">Twende! 🍸</button>
+    <button class="btn ghost" onclick="go('setup')">← Back</button>
+  </section>
+
+  <!-- PASS -->
+  <section class="screen" id="pass">
+    <div class="quit-btn" onclick="askQuit()">✕</div>
+    <p class="eyebrow" id="pass-mode">🍺 Sips</p>
+    <h2 class="display">Pass the phone to</h2>
+    <h2 class="display pass-name" id="pass-name">Player</h2>
+    <div class="phone-anim">📱</div>
+    <div class="mode-hint" id="pass-hint"></div>
+    <button class="btn" onclick="go('play');showCard()">I've got it</button>
+  </section>
+
+  <!-- PLAY -->
+  <section class="screen" id="play">
+    <div class="quit-btn" onclick="askQuit()">✕</div>
+    <div class="hud">
+      <span class="score-chip" id="play-who">Player</span>
+      <span class="score-chip" id="play-mode-chip">🍺 Sips</span>
+    </div>
+    <div class="card" id="cardEl" style="--deckcolor:var(--wine)">
+      <span class="cat-label" id="card-cat">Truth</span>
+      <span class="cat-emoji" id="card-emoji">🤫</span>
+      <div class="qtext" id="card-text"></div>
+    </div>
+    <div class="actions" id="truth-actions">
+      <button class="btn sip" id="alt-btn" onclick="chooseAlt()">🍺 Sip</button>
+      <button class="btn truth" onclick="nextTurn()">Answered 😏</button>
+    </div>
+    <button class="btn wide" id="continue-btn" style="display:none" onclick="nextTurn()">Next 👉</button>
+  </section>
+
+  <!-- QUIT CONFIRM -->
+  <div class="modal-overlay" id="quitModal">
+    <div class="modal-card">
+      <h3>End the game?</h3>
+      <p>This takes you back to the start. The current round will be lost.</p>
+      <div class="modal-actions">
+        <button class="btn wine" onclick="confirmQuit()">Yes, end game</button>
+        <button class="btn ghost" onclick="closeQuit()">Keep playing</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script src="content.js"></script>
+<script>
+/* ============ NATIVE (Capacitor) ============ */
+const Cap = window.Capacitor;
+function buzz(style){
+  try{
+    if(Cap && Cap.Plugins && Cap.Plugins.Haptics){ Cap.Plugins.Haptics.impact({ style: style || 'MEDIUM' }); }
+    else if(navigator.vibrate){ navigator.vibrate(style === 'HEAVY' ? 55 : 22); }
+  }catch(e){}
+}
+
+/* ============ STATE ============ */
+let S = {
+  players: ["", "", "", ""],
+  mode: 'sips',
+  cats: [],           // selected category keys
+  pool: [],           // shuffled truth prompts {text, cat, emoji}
+  dares: [],          // shuffled dares
+  pIdx: 0
+};
+
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+
+/* ============ PLAYERS ============ */
+function renderPlayers(){
+  const list = document.getElementById('playerList');
+  list.innerHTML = "";
+  S.players.forEach((name, i) => {
+    const row = document.createElement('div'); row.className = 'player-row';
+    const input = document.createElement('input');
+    input.type='text'; input.maxLength=16; input.placeholder='Player '+(i+1); input.value=name;
+    input.oninput = e => { S.players[i] = e.target.value; };
+    row.appendChild(input);
+    if(S.players.length > 2){
+      const rm = document.createElement('button'); rm.className='remove'; rm.textContent='×';
+      rm.onclick = () => { S.players.splice(i,1); renderPlayers(); };
+      row.appendChild(rm);
+    }
+    list.appendChild(row);
+  });
+}
+function addPlayer(){ if(S.players.length<16){ S.players.push(""); renderPlayers(); } }
+function cleanNames(){ return S.players.map(n=>n.trim()).filter(n=>n.length>0); }
+function setMode(m){
+  S.mode = m;
+  document.getElementById('modeSips').classList.toggle('sel', m==='sips');
+  document.getElementById('modeDare').classList.toggle('sel', m==='dare');
+}
+
+/* ============ CATEGORIES ============ */
+function goCategories(){
+  const names = cleanNames();
+  if(names.length < 2){ document.getElementById('setup-warn').textContent = "Add at least 2 players to start."; return; }
+  document.getElementById('setup-warn').textContent = "";
+  renderCategories();
+  go('categories');
+}
+function renderCategories(){
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = "";
+  Object.entries(CONTENT.categories).forEach(([key, c]) => {
+    const el = document.createElement('button');
+    el.className = 'cat' + (S.cats.includes(key) ? ' sel' : '');
+    el.onclick = () => toggleCat(key, el);
+    el.innerHTML = `<span class="cemoji">${c.emoji}</span>
+      <div><h3>${c.name}</h3><p>${c.desc}</p></div>
+      ${c.tier==='premium' ? '<span class="lock">Premium</span>' : ''}
+      <span class="check">✓</span>`;
+    grid.appendChild(el);
+  });
+  // default: select all free categories if nothing chosen yet
+  if(S.cats.length === 0){
+    Object.entries(CONTENT.categories).forEach(([key,c])=>{ if(c.tier==='free') S.cats.push(key); });
+    renderCategories();
+  }
+}
+function toggleCat(key, el){
+  const i = S.cats.indexOf(key);
+  if(i>=0){ S.cats.splice(i,1); el.classList.remove('sel'); }
+  else { S.cats.push(key); el.classList.add('sel'); }
+  document.getElementById('cat-warn').textContent = "";
+}
+
+/* ============ GAME ============ */
+function buildPool(){
+  let pool = [];
+  S.cats.forEach(key => {
+    const c = CONTENT.categories[key];
+    c.q.forEach(text => pool.push({ text, cat:c.name, emoji:c.emoji }));
+  });
+  S.pool = shuffle(pool);
+  S.dares = shuffle(CONTENT.dares.q.slice());
+}
+function startGame(){
+  if(S.cats.length === 0){ document.getElementById('cat-warn').textContent = "Pick at least one topic."; return; }
+  buildPool();
+  S.pIdx = 0;
+  showPass();
+}
+function currentPlayer(){ const names = cleanNames(); return names[S.pIdx % names.length]; }
+
+function showPass(){
+  document.getElementById('pass-mode').textContent = S.mode==='sips' ? '🍺 Sips' : '🎭 Dares';
+  document.getElementById('pass-name').textContent = currentPlayer();
+  document.getElementById('pass-hint').innerHTML = S.mode==='sips'
+    ? 'Answer the truth honestly — or <b>take a sip</b> to skip it.'
+    : 'Answer the truth honestly — or <b>do a dare</b> to skip it.';
+  go('pass');
+}
+function showCard(){
+  document.getElementById('play-who').textContent = currentPlayer();
+  document.getElementById('play-mode-chip').textContent = S.mode==='sips' ? '🍺 Sips' : '🎭 Dares';
+  document.getElementById('alt-btn').textContent = S.mode==='sips' ? '🍺 Sip' : '🎭 Dare';
+  drawTruth();
+}
+function drawTruth(){
+  if(S.pool.length === 0) buildPool();
+  const item = S.pool.pop();
+  document.getElementById('card-cat').textContent = item.cat;
+  document.getElementById('card-emoji').textContent = item.emoji;
+  document.getElementById('card-text').innerHTML = item.text;
+  document.getElementById('truth-actions').style.display = 'flex';
+  document.getElementById('continue-btn').style.display = 'none';
+  const el = document.getElementById('cardEl');
+  el.style.animation='none'; void el.offsetWidth; el.style.animation='pop .22s ease';
+  buzz('LIGHT');
+}
+function chooseAlt(){
+  if(S.mode === 'sips'){
+    buzz('MEDIUM');
+    nextTurn();
+  } else {
+    if(S.dares.length === 0) S.dares = shuffle(CONTENT.dares.q.slice());
+    const d = S.dares.pop();
+    document.getElementById('card-cat').textContent = 'Dare';
+    document.getElementById('card-emoji').textContent = '🎭';
+    document.getElementById('card-text').innerHTML = '<span class="dare-tag">Your dare</span><br>' + d;
+    document.getElementById('truth-actions').style.display = 'none';
+    document.getElementById('continue-btn').style.display = 'block';
+    buzz('MEDIUM');
+  }
+}
+function nextTurn(){
+  S.pIdx++;
+  showPass();
+}
+
+/* ============ QUIT ============ */
+function askQuit(){ document.getElementById('quitModal').classList.add('show'); }
+function closeQuit(){ document.getElementById('quitModal').classList.remove('show'); }
+function confirmQuit(){ closeQuit(); go('title'); }
+
+/* ============ BACK BUTTON ============ */
+try{
+  if(Cap && Cap.Plugins && Cap.Plugins.App){
+    Cap.Plugins.App.addListener('backButton', ()=>{
+      const active = document.querySelector('.screen.active').id;
+      if(document.getElementById('quitModal').classList.contains('show')){ closeQuit(); return; }
+      if(active === 'title'){ Cap.Plugins.App.exitApp(); }
+      else if(active === 'agegate'){ go('title'); }
+      else if(active === 'setup'){ go('agegate'); }
+      else if(active === 'categories'){ go('setup'); }
+      else if(active === 'pass' || active === 'play'){ askQuit(); }
+    });
+  }
+}catch(e){}
+
+/* ============ INIT ============ */
+renderPlayers();
+</script>
+</body>
+</html>
