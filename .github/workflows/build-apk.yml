@@ -32,7 +32,7 @@ jobs:
           chmod +x android/gradlew
           cd android
           ./gradlew bundleRelease \
-            -Pandroid.injected.signing.store.file=app/truthorsip.jks \
+            -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/android/app/truthorsip.jks \
             -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} \
             -Pandroid.injected.signing.key.alias=truthorsip \
             -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
