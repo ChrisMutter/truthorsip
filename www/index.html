@@ -141,6 +141,20 @@
   .modal-card h3{font-family:'Anton';font-size:26px;text-transform:uppercase;}
   .modal-card p{color:var(--muted);font-weight:600;font-size:14.5px;margin:8px 0 22px;line-height:1.5;}
   .modal-actions{display:flex;flex-direction:column;gap:10px;}
+
+  /* swipe interaction */
+  #cardEl{touch-action:pan-y;will-change:transform;}
+  #cardEl.dragging{transition:none;}
+  #cardEl.snapping{transition:transform .28s cubic-bezier(.2,.8,.3,1);}
+  #cardEl.flyoff{transition:transform .32s ease, opacity .32s ease;}
+  .swipe-stamp{position:absolute;top:22px;font-family:'Anton';font-size:26px;letter-spacing:.06em;
+    text-transform:uppercase;padding:8px 16px;border-radius:12px;opacity:0;pointer-events:none;z-index:3;
+    border:3px solid currentColor;transform:rotate(-12deg);}
+  .swipe-stamp.left{left:20px;color:var(--wine);}
+  .swipe-stamp.right{right:20px;color:#1f9d63;transform:rotate(12deg);}
+  .swipe-hint{text-align:center;font-size:12.5px;font-weight:700;letter-spacing:.04em;color:var(--muted);
+    margin:-6px 0 12px;opacity:.85;transition:opacity .3s;}
+  .swipe-hint.hide{opacity:0;}
 </style>
 </head>
 <body>
@@ -172,8 +186,8 @@
 
   <!-- SETUP -->
   <section class="screen" id="setup">
-    <p class="eyebrow">Who's playing?</p>
-    <h2 style="font-size:32px;margin-top:6px;">The circle</h2>
+    <p class="eyebrow">Round up your people</p>
+    <h2 style="font-size:32px;margin-top:6px;">Who's in?</h2>
     <p class="setup-hint">Add everyone. We'll pass the phone around in order.</p>
 
     <div class="field">
@@ -185,8 +199,9 @@
     <div class="field">
       <label>Mode</label>
       <div class="pillrow">
-        <div class="pill sel" id="modeSips" onclick="setMode('sips')">🍺 Sips</div>
-        <div class="pill" id="modeDare" onclick="setMode('dare')">🎭 Dares (dry)</div>
+        <div class="pill sel" id="modeMixed" onclick="setMode('mixed')">🎲 Mixed</div>
+        <div class="pill" id="modeSips" onclick="setMode('sips')">🍺 Sips</div>
+        <div class="pill" id="modeDare" onclick="setMode('dare')">🎭 Dry</div>
       </div>
     </div>
 
@@ -204,7 +219,7 @@
     <div class="cat-grid" id="catGrid"></div>
     <div style="height:14px"></div>
     <p class="setup-warn" id="cat-warn"></p>
-    <button class="btn" onclick="startGame()">Let's Go!🍸</button>
+    <button class="btn" onclick="startGame()">Let's Go 🍸</button>
     <button class="btn ghost" onclick="go('setup')">← Back</button>
   </section>
 
@@ -227,10 +242,13 @@
       <span class="score-chip" id="play-mode-chip">🍺 Sips</span>
     </div>
     <div class="card" id="cardEl" style="--deckcolor:var(--wine)">
+      <span class="swipe-stamp left" id="stamp-left">🍺 Sip</span>
+      <span class="swipe-stamp right" id="stamp-right">Answered</span>
       <span class="cat-label" id="card-cat">Truth</span>
       <span class="cat-emoji" id="card-emoji">🤫</span>
       <div class="qtext" id="card-text"></div>
     </div>
+    <p class="swipe-hint" id="swipe-hint">← swipe to sip · swipe to answer →</p>
     <div class="actions" id="truth-actions">
       <button class="btn sip" id="alt-btn" onclick="chooseAlt()">🍺 Sip</button>
       <button class="btn truth" onclick="nextTurn()">Answered 😏</button>
@@ -241,10 +259,10 @@
   <!-- QUIT CONFIRM -->
   <div class="modal-overlay" id="quitModal">
     <div class="modal-card">
-      <h3>End the game?</h3>
-      <p>This takes you back to the start. The current round will be lost.</p>
+      <h3>End this round?</h3>
+      <p>You'll go back to pick topics. Your players stay — only the current round ends.</p>
       <div class="modal-actions">
-        <button class="btn wine" onclick="confirmQuit()">Yes, end game</button>
+        <button class="btn wine" onclick="confirmQuit()">Change topics</button>
         <button class="btn ghost" onclick="closeQuit()">Keep playing</button>
       </div>
     </div>
@@ -252,7 +270,216 @@
 
 </div>
 
-<script src="content.js"></script>
+<script>const CONTENT = {
+  "categories": {
+    "warmup": {
+      "name": "Warm-Up",
+      "emoji": "🌤️",
+      "tier": "free",
+      "desc": "Ease everyone in.",
+      "q": [
+        "What's the first thing you'd do if you won the lottery tonight?",
+        "Show the group your phone wallpaper and explain it.",
+        "What's your most-used emoji? Show your keyboard.",
+        "What's the last song you had on repeat?",
+        "Who in this room did you know the longest?",
+        "What's your comfort meal after a long day?",
+        "Show the last photo you took on your phone.",
+        "What's a small thing that instantly ruins your mood?",
+        "What's your go-to karaoke song?",
+        "What's the best purchase you made this year?",
+        "What's your most useless talent?",
+        "If you could only eat one Kenyan dish forever, what is it?",
+        "What's the last thing you Googled?",
+        "What show are you low-key obsessed with right now?",
+        "What's your toxic trait when you're hungry?",
+        "Which app do you waste the most time on?",
+        "What's your dream holiday destination?",
+        "What nickname did you have growing up?",
+        "What's a trend you don't understand at all?",
+        "What's the pettiest hill you'll die on?"
+      ]
+    },
+    "confessions": {
+      "name": "Confessions",
+      "emoji": "🤫",
+      "tier": "free",
+      "desc": "Spill something real.",
+      "q": [
+        "What's a lie you've told to skip a family function?",
+        "Confess a time you got caught in a lie.",
+        "What's the pettiest reason you've ghosted someone?",
+        "What's a rumour about you that's actually true?",
+        "What's the most you've ever lied about on a CV or to impress someone?",
+        "When did you last cry, and why?",
+        "What's a secret you've never told anyone at this table?",
+        "What's the worst thing you've done that you got away with?",
+        "Have you ever pretended to like a gift? Whose was it?",
+        "What's a habit you'd be embarrassed for your mum to know about?",
+        "What's the most childish thing you still do?",
+        "Have you ever snooped through someone's phone? Whose?",
+        "What's a purchase you're hiding from someone?",
+        "What's the last white lie you told, today?",
+        "What's something you pretend to understand but don't?",
+        "What's the most embarrassing thing in your search history this week?",
+        "Have you ever faked being sick to avoid work? What did you do instead?",
+        "What's a compliment you gave that you didn't mean?",
+        "What's the worst gift you've ever re-gifted?",
+        "What's something everyone thinks you're good at, but you're faking?"
+      ]
+    },
+    "moneymatters": {
+      "name": "Money Matters",
+      "emoji": "💸",
+      "tier": "free",
+      "desc": "Where the shillings really go.",
+      "q": [
+        "Show your most recent M-Pesa transaction.",
+        "How much is in your M-Pesa right now? Round to the nearest 100.",
+        "What's the most you've spent on a night out and regretted?",
+        "What's the most useless thing you've ever bought?",
+        "How much did your outfit tonight cost, roughly?",
+        "Who at this table would you lend 10k? Who wouldn't you?",
+        "What's your biggest money weakness?",
+        "Have you ever borrowed money and 'forgotten' to pay it back?",
+        "What's the most you've ever tipped, and why?",
+        "Reveal your most-used 'Send Money' contact this month.",
+        "What subscription are you paying for but never use?",
+        "What would you do with 1 million shillings, right now?",
+        "Have you ever lied about how much something cost? To who?",
+        "What's the pettiest thing you've split a bill over?",
+        "What's your worst impulse buy this year?",
+        "How much do you spend on takeout in a week, honestly?",
+        "Who's the last person who owes you money, and how much?",
+        "What's a purchase you'd never admit to your parents?"
+      ]
+    },
+    "loveandexes": {
+      "name": "Love & Exes",
+      "emoji": "💔",
+      "tier": "premium",
+      "desc": "Situationships, exes, and receipts.",
+      "q": [
+        "Reveal the contact name you've saved your ex under.",
+        "Which of your exes would you reply to if they texted tonight?",
+        "Read your last text to your crush out loud.",
+        "Who in this room would you set up on a date, and with who?",
+        "What's the worst date you've ever been on in Nairobi?",
+        "What's your biggest green flag? And your reddest red flag?",
+        "Have you ever slid into someone's DMs? Did it work?",
+        "Whose Instagram do you check the most?",
+        "What's the most you've ever done to impress someone?",
+        "What's a dealbreaker that's non-negotiable for you?",
+        "Have you ever been caught stalking someone online?",
+        "What's the pettiest reason you've turned someone down?",
+        "Who was your first celebrity crush?",
+        "What's the cheesiest thing you've ever said to someone?",
+        "Have you ever dated two people at once? Spill.",
+        "What's your type, in three words?",
+        "Show the last person you texted a heart emoji to.",
+        "What's the longest you've gone stalking someone's profile?",
+        "Who's the one that got away?",
+        "What's a lie you've told on a first date?"
+      ]
+    },
+    "friendsroast": {
+      "name": "The Roast",
+      "emoji": "🔥",
+      "tier": "premium",
+      "desc": "Turn on each other. Lovingly.",
+      "q": [
+        "Who at this table gives the worst advice?",
+        "Who here is most likely to get famous, and for what?",
+        "Who's the messiest person in this room?",
+        "Rank the people here by who'd survive longest with no phone.",
+        "Who's most likely to text their ex tonight?",
+        "Who here has the worst taste in partners?",
+        "Who's the biggest drama magnet at this table?",
+        "Who would you trust least with a secret? Be honest.",
+        "Who's most likely to become a millionaire? Who's most likely to lose it all?",
+        "Who here takes the longest to reply to texts?",
+        "Who's the worst driver in this room?",
+        "Who would last the shortest in Big Brother?",
+        "Point at the biggest overthinker here.",
+        "Who's most likely to start a business and abandon it in a month?",
+        "Who's the cheapest person at this table?",
+        "Who here is most likely to fake their own glow-up?",
+        "Who gives the best hugs? Who gives the worst?",
+        "Who's the funniest person here — and who thinks they are but isn't?"
+      ]
+    },
+    "spicy": {
+      "name": "After Dark",
+      "emoji": "🌶️",
+      "tier": "premium",
+      "desc": "For the bold. 18+ energy.",
+      "q": [
+        "What's the boldest thing you've done to get someone's attention?",
+        "What's your most controversial opinion about dating?",
+        "Reveal the most recent thing in your 'liked' posts.",
+        "What's the wildest place you've ever kissed someone?",
+        "What's a secret talent you'd only show someone you're into?",
+        "What's the most reckless thing you've done for a night out?",
+        "What's your biggest 'ick'?",
+        "Have you ever left a party without telling anyone? Why?",
+        "What's the most trouble you've been in with your parents as an adult?",
+        "What's a text you're glad you deleted?",
+        "What's the most spontaneous thing you've ever done?",
+        "Who in this room would you swap lives with for a wild weekend?",
+        "What's your most embarrassing drunk story? (keep it PG-ish)",
+        "What's a rule you love breaking?",
+        "What's the pettiest revenge you've ever taken?",
+        "What's the boldest outfit you've ever worn out?",
+        "What's a secret you'd take to the grave — hint at it?",
+        "What's the most 'main character' thing you've ever done?"
+      ]
+    }
+  },
+  "dares": {
+    "name": "Dares",
+    "emoji": "🎭",
+    "q": [
+      "Do your best matatu tout impression for 30 seconds.",
+      "Speak only in Sheng until your next turn.",
+      "Do 10 squats while singing the national anthem.",
+      "Call a random contact and sing them happy birthday.",
+      "Show the group your best gengetone dance move.",
+      "Let the person on your left check your phone wallpaper.",
+      "Swap one item of clothing with the person on your right for two rounds.",
+      "Do an impression of someone in this room until they guess who.",
+      "Speak in a British accent until your next turn.",
+      "Post 'making questionable decisions tonight' on your status.",
+      "Let the group pick your WhatsApp profile pic for 10 minutes.",
+      "Do your best ugali-serving flex.",
+      "Recite a line from any Vitimbi or Papa Shirandula scene.",
+      "Compliment everyone at the table — no repeats.",
+      "Text 'we need to talk' to a friend, then immediately say 'jk'.",
+      "Let the person across from you send one emoji to your last chat.",
+      "Do your best runway walk across the room.",
+      "Talk in a whisper until it's your turn again.",
+      "Let the group give you a new nickname for the rest of the night.",
+      "Do your best news anchor impression reading the last text you received.",
+      "Hold a plank until the next person finishes their turn.",
+      "Sing your request instead of saying it for the next two rounds.",
+      "Do your best celebrity impression until someone guesses.",
+      "Let someone screenshot your most recent photo and caption it."
+    ]
+  }
+};
+
+CONTENT.breakers = [
+  { icon:"🍻", title:"EVERYBODY DRINKS", text:"Group sip! Everyone takes one — cheers." },
+  { icon:"🔄", title:"REVERSE ORDER", text:"The turn order flips. Play now goes the other way." },
+  { icon:"🍺🍺", title:"DOUBLE OR NOTHING", text:"Answer this one honestly, or take TWO sips." },
+  { icon:"🍀", title:"LUCKY ESCAPE", text:"You're off the hook! Skip your turn, no sip needed." },
+  { icon:"👉", title:"PASS IT ON", text:"Pick someone else to answer the next question for you." },
+  { icon:"🎤", title:"TABLE TALK", text:"Everyone answers this out loud: what's your current guilty pleasure?" },
+  { icon:"🤳", title:"SNAP CHECK", text:"Show the group the last photo in your camera roll — or take a sip." },
+  { icon:"👑", title:"CROWN THE HOST", text:"The player with the most drinks so far makes a rule everyone must follow for 3 rounds." },
+  { icon:"🔀", title:"SWAP SEATS", text:"Everyone shifts one seat to the left. New neighbours, new energy." },
+  { icon:"🗳️", title:"MOST LIKELY TO", text:"On the count of 3, everyone points at who's most likely to text their ex tonight. Most votes drinks." }
+];
+</script>
 <script>
 /* ============ NATIVE (Capacitor) ============ */
 const Cap = window.Capacitor;
@@ -265,8 +492,8 @@ function buzz(style){
 
 /* ============ STATE ============ */
 let S = {
-  players: ["", "", "", ""],
-  mode: 'sips',
+  players: ["", ""],
+  mode: 'mixed',
   cats: [],           // selected category keys
   pool: [],           // shuffled truth prompts {text, cat, emoji}
   dares: [],          // shuffled dares
@@ -301,9 +528,13 @@ function addPlayer(){ if(S.players.length<16){ S.players.push(""); renderPlayers
 function cleanNames(){ return S.players.map(n=>n.trim()).filter(n=>n.length>0); }
 function setMode(m){
   S.mode = m;
+  document.getElementById('modeMixed').classList.toggle('sel', m==='mixed');
   document.getElementById('modeSips').classList.toggle('sel', m==='sips');
   document.getElementById('modeDare').classList.toggle('sel', m==='dare');
 }
+// label helpers for the current mode
+function modeChip(){ return S.mode==='mixed' ? '🎲 Mixed' : (S.mode==='sips' ? '🍺 Sips' : '🎭 Dry'); }
+function altLabel(){ return S.mode==='sips' ? '🍺 Sip' : (S.mode==='dare' ? '🎭 Dare' : '🎲 Dodge'); }
 
 /* ============ CATEGORIES ============ */
 function goCategories(){
@@ -358,20 +589,28 @@ function startGame(){
 function currentPlayer(){ const names = cleanNames(); return names[S.pIdx % names.length]; }
 
 function showPass(){
-  document.getElementById('pass-mode').textContent = S.mode==='sips' ? '🍺 Sips' : '🎭 Dares';
+  document.getElementById('pass-mode').textContent = modeChip();
   document.getElementById('pass-name').textContent = currentPlayer();
-  document.getElementById('pass-hint').innerHTML = S.mode==='sips'
-    ? 'Answer the truth honestly — or <b>take a sip</b> to skip it.'
-    : 'Answer the truth honestly — or <b>do a dare</b> to skip it.';
+  const hint = S.mode==='sips' ? 'Answer the truth honestly — or <b>take a sip</b> to skip it.'
+             : S.mode==='dare' ? 'Answer the truth honestly — or <b>do a dare</b> to skip it.'
+             : 'Answer honestly — or <b>dodge</b> and let fate pick: a sip or a dare.';
+  document.getElementById('pass-hint').innerHTML = hint;
   go('pass');
 }
 function showCard(){
   document.getElementById('play-who').textContent = currentPlayer();
-  document.getElementById('play-mode-chip').textContent = S.mode==='sips' ? '🍺 Sips' : '🎭 Dares';
-  document.getElementById('alt-btn').textContent = S.mode==='sips' ? '🍺 Sip' : '🎭 Dare';
+  document.getElementById('play-mode-chip').textContent = modeChip();
+  document.getElementById('alt-btn').textContent = altLabel();
+  document.getElementById('stamp-left').textContent = altLabel();
   drawTruth();
 }
 function drawTruth(){
+  // ~1 in 9 cards is a pattern-breaker wild card (skip if it was just shown)
+  if(CONTENT.breakers && CONTENT.breakers.length && !S.lastWasBreaker && Math.random() < 0.11){
+    showBreaker();
+    return;
+  }
+  S.lastWasBreaker = false;
   if(S.pool.length === 0) buildPool();
   const item = S.pool.pop();
   document.getElementById('card-cat').textContent = item.cat;
@@ -379,22 +618,61 @@ function drawTruth(){
   document.getElementById('card-text').innerHTML = item.text;
   document.getElementById('truth-actions').style.display = 'flex';
   document.getElementById('continue-btn').style.display = 'none';
+  document.getElementById('cardEl').style.setProperty('--deckcolor','var(--wine)');
+  const h = document.getElementById('swipe-hint');
+  if(h && !h.classList.contains('hide')) h.textContent = '\u2190 swipe to ' + (S.mode==='sips'?'sip':S.mode==='dare'?'dare':'dodge') + ' \u00b7 swipe to answer \u2192';
   const el = document.getElementById('cardEl');
   el.style.animation='none'; void el.offsetWidth; el.style.animation='pop .22s ease';
   buzz('LIGHT');
 }
+
+function showBreaker(){
+  S.lastWasBreaker = true;
+  if(!S.breakerPile || S.breakerPile.length === 0) S.breakerPile = shuffle(CONTENT.breakers.slice());
+  const b = S.breakerPile.pop();
+  document.getElementById('card-cat').textContent = 'Wild Card';
+  document.getElementById('card-emoji').textContent = b.icon;
+  document.getElementById('card-text').innerHTML =
+    '<span class="dare-tag" style="color:var(--gold)">\u2726 ' + b.title + ' \u2726</span><br>' + b.text;
+  document.getElementById('truth-actions').style.display = 'none';
+  document.getElementById('continue-btn').style.display = 'block';
+  document.getElementById('cardEl').style.setProperty('--deckcolor','var(--gold)');
+  const h = document.getElementById('swipe-hint');
+  if(h && !h.classList.contains('hide')) h.textContent = 'swipe or tap Next \u2192';
+  const el = document.getElementById('cardEl');
+  el.style.animation='none'; void el.offsetWidth; el.style.animation='pop .22s ease';
+  buzz('HEAVY');
+}
 function chooseAlt(){
-  if(S.mode === 'sips'){
-    buzz('MEDIUM');
-    nextTurn();
+  // decide sip vs dare based on mode; mixed picks randomly each time
+  let outcome = S.mode;
+  if(S.mode === 'mixed') outcome = Math.random() < 0.5 ? 'sips' : 'dare';
+
+  if(outcome === 'sips'){
+    // in mixed we reveal WHAT fate chose, so the sip feels earned
+    if(S.mode === 'mixed'){
+      document.getElementById('card-cat').textContent = 'Fate says';
+      document.getElementById('card-emoji').textContent = '🍺';
+      document.getElementById('card-text').innerHTML = '<span class="dare-tag">Take a sip</span><br>Fate chose the bottle. Down one sip, then pass on.';
+      document.getElementById('truth-actions').style.display = 'none';
+      document.getElementById('continue-btn').style.display = 'block';
+      document.getElementById('cardEl').style.setProperty('--deckcolor','var(--wine)');
+      buzz('MEDIUM');
+    } else {
+      buzz('MEDIUM');
+      nextTurn();
+    }
   } else {
     if(S.dares.length === 0) S.dares = shuffle(CONTENT.dares.q.slice());
     const d = S.dares.pop();
-    document.getElementById('card-cat').textContent = 'Dare';
+    document.getElementById('card-cat').textContent = S.mode==='mixed' ? 'Fate says' : 'Dare';
     document.getElementById('card-emoji').textContent = '🎭';
     document.getElementById('card-text').innerHTML = '<span class="dare-tag">Your dare</span><br>' + d;
     document.getElementById('truth-actions').style.display = 'none';
     document.getElementById('continue-btn').style.display = 'block';
+    document.getElementById('cardEl').style.setProperty('--deckcolor','var(--wine)');
+    const h = document.getElementById('swipe-hint');
+    if(h && !h.classList.contains('hide')) h.textContent = 'swipe or tap Next \u2192';
     buzz('MEDIUM');
   }
 }
@@ -403,10 +681,109 @@ function nextTurn(){
   showPass();
 }
 
+
+/* ============ SWIPE ============ */
+let sw = { active:false, x0:0, y0:0, dx:0, dy:0, locked:false, seen:false };
+const SWIPE_COMMIT = 0.32; // fraction of card width to trigger
+
+function cardEl(){ return document.getElementById('cardEl'); }
+
+function isDareRevealed(){
+  // during a revealed dare, actions are hidden and continue is shown — swipe should just advance
+  return document.getElementById('continue-btn').style.display === 'block';
+}
+
+function onSwipeStart(e){
+  if(document.querySelector('.screen.active').id !== 'play') return;
+  const p = e.touches ? e.touches[0] : e;
+  sw.active = true; sw.locked = false; sw.dx = 0; sw.dy = 0;
+  sw.x0 = p.clientX; sw.y0 = p.clientY;
+  const el = cardEl();
+  el.classList.add('dragging'); el.classList.remove('snapping');
+}
+function onSwipeMove(e){
+  if(!sw.active) return;
+  const p = e.touches ? e.touches[0] : e;
+  sw.dx = p.clientX - sw.x0;
+  sw.dy = p.clientY - sw.y0;
+  // lock to horizontal only once intent is clear, so vertical scroll still works
+  if(!sw.locked){
+    if(Math.abs(sw.dx) > 8 || Math.abs(sw.dy) > 8){
+      sw.locked = true;
+      if(Math.abs(sw.dy) > Math.abs(sw.dx)){ sw.active = false; cardEl().classList.remove('dragging'); return; }
+    } else return;
+  }
+  if(e.cancelable) e.preventDefault();
+  const el = cardEl();
+  const rot = sw.dx / 18;
+  el.style.transform = `translateX(${sw.dx}px) rotate(${rot}deg)`;
+  const w = el.offsetWidth || 320;
+  const prog = Math.min(1, Math.abs(sw.dx) / (w * SWIPE_COMMIT));
+  const right = document.getElementById('stamp-right');
+  const left = document.getElementById('stamp-left');
+  if(sw.dx > 0){ right.style.opacity = prog; left.style.opacity = 0; }
+  else { left.style.opacity = prog; right.style.opacity = 0; }
+}
+function onSwipeEnd(){
+  if(!sw.active){ resetStamps(); return; }
+  sw.active = false;
+  const el = cardEl();
+  el.classList.remove('dragging');
+  const w = el.offsetWidth || 320;
+  const committed = Math.abs(sw.dx) > w * SWIPE_COMMIT;
+  if(committed){
+    hideHintForever();
+    const dir = sw.dx > 0 ? 1 : -1;
+    el.classList.add('flyoff');
+    el.style.transform = `translateX(${dir * (w + 200)}px) rotate(${dir*18}deg)`;
+    el.style.opacity = '0';
+    setTimeout(() => {
+      el.classList.remove('flyoff');
+      el.style.transition = 'none';
+      el.style.transform = ''; el.style.opacity = '';
+      void el.offsetWidth;
+      el.style.transition = '';
+      resetStamps();
+      // apply outcome
+      if(isDareRevealed()){ nextTurn(); }
+      else if(dir > 0){ nextTurn(); }        // swipe right = answered
+      else { chooseAlt(); }                   // swipe left = sip / dare
+    }, 300);
+  } else {
+    el.classList.add('snapping');
+    el.style.transform = '';
+    resetStamps();
+  }
+}
+function resetStamps(){
+  const r = document.getElementById('stamp-right'), l = document.getElementById('stamp-left');
+  if(r) r.style.opacity = 0; if(l) l.style.opacity = 0;
+}
+function hideHintForever(){
+  if(sw.seen) return;
+  sw.seen = true;
+  const h = document.getElementById('swipe-hint');
+  if(h) h.classList.add('hide');
+}
+
+// Bind once
+(function bindSwipe(){
+  const el = cardEl();
+  if(!el) return;
+  el.addEventListener('touchstart', onSwipeStart, {passive:true});
+  el.addEventListener('touchmove', onSwipeMove, {passive:false});
+  el.addEventListener('touchend', onSwipeEnd);
+  el.addEventListener('touchcancel', onSwipeEnd);
+  // mouse (for desktop preview / testing)
+  el.addEventListener('mousedown', onSwipeStart);
+  window.addEventListener('mousemove', e => { if(sw.active) onSwipeMove(e); });
+  window.addEventListener('mouseup', () => { if(sw.active) onSwipeEnd(); });
+})();
+
 /* ============ QUIT ============ */
 function askQuit(){ document.getElementById('quitModal').classList.add('show'); }
 function closeQuit(){ document.getElementById('quitModal').classList.remove('show'); }
-function confirmQuit(){ closeQuit(); go('title'); }
+function confirmQuit(){ closeQuit(); renderCategories(); go('categories'); }
 
 /* ============ BACK BUTTON ============ */
 try{
