@@ -174,6 +174,12 @@
   .swipe-hint{text-align:center;font-size:12.5px;font-weight:700;letter-spacing:.04em;color:var(--muted);
     margin:-4px 0 8px;opacity:.85;transition:opacity .3s;}
   .swipe-hint.hide{opacity:0;}
+
+  /* ---------- PURCHASE MODAL ---------- */
+  #purchaseModal .modal-card h3{font-size:22px;}
+  #purchaseModal .modal-card .price-tag{font-family:'Anton';font-size:32px;color:var(--gold);margin:6px 0 4px;}
+  #purchaseModal .modal-card .price-sub{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:18px;}
+  #purchaseModal .modal-card .deck-emoji{font-size:40px;margin-bottom:6px;}
 </style>
 </head>
 <body>
@@ -308,7 +314,122 @@
     </div>
   </div>
 
+  <!-- PURCHASE MODAL -->
+  <div class="modal-overlay" id="purchaseModal">
+    <div class="modal-card">
+      <div class="deck-emoji" id="purchase-emoji">💔</div>
+      <h3 id="purchase-name">Love & Exes Deck</h3>
+      <div class="price-tag" id="purchase-price">KES 200</div>
+      <p class="price-sub">One-time purchase · Unlocks forever</p>
+      <p id="purchase-desc" style="color:var(--muted);font-weight:600;font-size:13.5px;margin-bottom:18px;line-height:1.5;"></p>
+      <div class="modal-actions">
+        <button class="btn wine" id="purchase-btn" onclick="confirmPurchase()">Unlock Now</button>
+        <button class="btn ghost" onclick="closePurchaseModal()">Maybe later</button>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+<script>
+/* ============ BILLING ============
+   Bridge to native Android via Capacitor plugin OR Android JS Interface.
+   In closed testing, all purchases are FREE (Google test flow).
+   ================================================== */
+
+const PREMIUM_DECKS = {
+  loveandexes: { productId: 'deck_love_exes', name: 'Love & Exes Deck', emoji: '💔', price: 'KES 200', desc: 'Spicy relationship questions for couples and exes.' },
+  friendsroast: { productId: 'deck_roast',     name: 'Friends Roast Deck', emoji: '🔥', price: 'KES 200', desc: 'Savage roast questions to call out your friends.' },
+  spicy:        { productId: 'deck_after_dark', name: 'After Dark Deck',   emoji: '🌶️', price: 'KES 200', desc: 'Adults-only questions for a wild night in.' }
+};
+
+// Unlocked state — stored in localStorage so it persists across sessions
+let _unlockedDecks = {};
+(function loadUnlocked(){
+  try {
+    const raw = localStorage.getItem('tos_unlocked_v1');
+    if (raw) _unlockedDecks = JSON.parse(raw);
+  } catch(e) {}
+})();
+
+function saveUnlocked() {
+  try { localStorage.setItem('tos_unlocked_v1', JSON.stringify(_unlockedDecks)); } catch(e) {}
+}
+
+function isDeckUnlocked(catKey) {
+  if (!PREMIUM_DECKS[catKey]) return true; // free deck
+  return !!_unlockedDecks[catKey];
+}
+
+function unlockDeck(catKey) {
+  _unlockedDecks[catKey] = true;
+  saveUnlocked();
+}
+
+// Called by native Android layer after a successful purchase
+window.onPurchaseSuccess = function(productId) {
+  // Map productId back to catKey
+  Object.entries(PREMIUM_DECKS).forEach(([key, deck]) => {
+    if (deck.productId === productId) {
+      unlockDeck(key);
+      // Auto-select the deck if the purchase modal was showing it
+      if (_pendingPurchaseCat === key) {
+        S.cats.push(key);
+        renderCategories();
+      }
+    }
+  });
+  closePurchaseModal();
+  _pendingPurchaseCat = null;
+};
+
+// Called by native Android layer if purchase fails or is cancelled
+window.onPurchaseFailed = function(reason) {
+  closePurchaseModal();
+  _pendingPurchaseCat = null;
+};
+
+let _pendingPurchaseCat = null;
+
+function openPurchaseModal(catKey) {
+  const deck = PREMIUM_DECKS[catKey];
+  if (!deck) return;
+  _pendingPurchaseCat = catKey;
+  document.getElementById('purchase-emoji').textContent = deck.emoji;
+  document.getElementById('purchase-name').textContent = deck.name;
+  document.getElementById('purchase-price').textContent = deck.price;
+  document.getElementById('purchase-desc').textContent = deck.desc;
+  document.getElementById('purchaseModal').classList.add('show');
+}
+
+function closePurchaseModal() {
+  document.getElementById('purchaseModal').classList.remove('show');
+  _pendingPurchaseCat = null;
+}
+
+function confirmPurchase() {
+  const catKey = _pendingPurchaseCat;
+  if (!catKey) return;
+  const deck = PREMIUM_DECKS[catKey];
+  if (!deck) return;
+
+  // Try Capacitor plugin first, fall back to Android JS Interface
+  try {
+    if (window.TruthOrSipBilling && typeof window.TruthOrSipBilling.launchPurchase === 'function') {
+      window.TruthOrSipBilling.launchPurchase({ productId: deck.productId });
+    } else if (window.Android && typeof window.Android.launchPurchase === 'function') {
+      window.Android.launchPurchase(deck.productId);
+    } else {
+      // Dev/browser fallback — simulate unlock for testing
+      console.warn('[Billing] No billing bridge found — simulating unlock for:', deck.productId);
+      window.onPurchaseSuccess(deck.productId);
+    }
+  } catch(e) {
+    console.error('[Billing] Purchase error:', e);
+    closePurchaseModal();
+  }
+}
+</script>
 
 <script>const CONTENT = {
   "categories": {
@@ -573,12 +694,12 @@ function buzz(style){
 let S = {
   players: ["", ""],
   mode: 'mixed',
-  timerSecs: 30,   // 0 = off
+  timerSecs: 30,
   cats: [],
   pool: [],
   dares: [],
   pIdx: 0,
-  scores: {},      // { playerName: sipCount }
+  scores: {},
   inGame: false
 };
 
@@ -601,11 +722,9 @@ function restoreSession(){
     const saved = JSON.parse(raw);
     if(!saved || !saved.S || !saved.S.inGame) return false;
     Object.assign(S, saved.S);
-    // re-render
     renderPlayers();
     if(saved.screen === 'play'){
       go('play');
-      // rebuild HUD
       renderScoresBar();
       document.getElementById('play-who').textContent = currentPlayer();
       document.getElementById('play-who').classList.add('active-player');
@@ -626,12 +745,9 @@ function clearSession(){
   try{ sessionStorage.removeItem(SESSION_KEY); }catch(e){}
 }
 
-/* ============ VISIBILITY — resume on tab switch ============ */
+/* ============ VISIBILITY ============ */
 document.addEventListener('visibilitychange', () => {
   if(document.visibilityState === 'visible' && S.inGame){
-    // pause timer if it was running — it'll already be paused by clearTimeout
-    // nothing to restore — state is already in memory (only reloads clear it)
-    // but re-save to keep session fresh
     saveSession();
   }
 });
@@ -696,7 +812,7 @@ function renderCategories(){
     el.onclick = () => toggleCat(key, el);
     el.innerHTML = `<span class="cemoji">${c.emoji}</span>
       <div><h3>${c.name}</h3><p>${c.desc}</p></div>
-      ${c.tier==='premium' ? '<span class="lock">Premium</span>' : ''}
+      ${c.tier==='premium' && !isDeckUnlocked(key) ? '<span class="lock">Premium</span>' : ''}
       <span class="check">✓</span>`;
     grid.appendChild(el);
   });
@@ -706,11 +822,16 @@ function renderCategories(){
   }
 }
 function toggleCat(key, el){
-  const i = S.cats.indexOf(key);
-  if(i>=0){ S.cats.splice(i,1); el.classList.remove('sel'); }
-  else { S.cats.push(key); el.classList.add('sel'); }
-  document.getElementById('cat-warn').textContent = "";
-}
+    // If premium and not unlocked, show purchase modal instead
+    if (PREMIUM_DECKS[key] && !isDeckUnlocked(key)) {
+      openPurchaseModal(key);
+      return;
+    }
+    const i = S.cats.indexOf(key);
+    if(i>=0){ S.cats.splice(i,1); el.classList.remove('sel'); }
+    else { S.cats.push(key); el.classList.add('sel'); }
+    document.getElementById('cat-warn').textContent = "";
+  }
 
 /* ============ SCORES ============ */
 function initScores(){
@@ -738,7 +859,7 @@ function renderScoresBar(){
 /* ============ TIMER ============ */
 let timerInterval = null;
 let timerLeft = 0;
-const CIRC = 2 * Math.PI * 22; // 138.23
+const CIRC = 2 * Math.PI * 22;
 
 function startTimer(){
   stopTimer();
@@ -762,7 +883,6 @@ function startTimer(){
     if(timerLeft <= 0){
       stopTimer();
       buzz('HEAVY');
-      // auto-sip on timeout
       chooseAlt();
     }
   }, 1000);
@@ -1014,6 +1134,7 @@ try{
     Cap.Plugins.App.addListener('backButton', ()=>{
       const active = document.querySelector('.screen.active').id;
       if(document.getElementById('quitModal').classList.contains('show')){ closeQuit(); return; }
+      if(document.getElementById('purchaseModal').classList.contains('show')){ closePurchaseModal(); return; }
       if(active === 'title'){ Cap.Plugins.App.exitApp(); }
       else if(active === 'agegate'){ go('title'); }
       else if(active === 'setup'){ go('agegate'); }
@@ -1025,9 +1146,8 @@ try{
 
 /* ============ INIT ============ */
 renderPlayers();
-// Try to restore a session (e.g. after tab switch that caused a reload)
 if(!restoreSession()){
-  // fresh start — nothing to do
+  // fresh start
 }
 </script>
 </body>
