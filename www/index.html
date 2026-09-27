@@ -145,6 +145,9 @@
   .qtext{font-family:'Karla';font-weight:800;font-size:25px;line-height:1.3;color:var(--ink);z-index:1;}
   .dare-tag{display:inline-block;font-family:'Anton';font-size:14px;letter-spacing:.1em;color:var(--wine);
     margin-bottom:12px;text-transform:uppercase;}
+  .fmt-rule{display:block;margin-top:16px;font-family:'Karla';font-size:14px;font-weight:700;line-height:1.35;color:#7a5a4e;}
+  .wyr-opt{display:block;margin:6px 0;padding:10px 12px;border-radius:14px;background:rgba(228,64,95,.10);}
+  .wyr-or{display:block;font-family:'Anton';font-size:13px;letter-spacing:.14em;color:var(--wine);margin:2px 0;}
   .actions{display:flex;gap:12px;}
   .actions .btn{font-size:20px;padding:20px;}
   .btn.sip{background:var(--wine);color:#fff;box-shadow:0 6px 0 rgba(0,0,0,.5);}
@@ -443,27 +446,79 @@ function confirmPurchase() {
         "Show the group your phone wallpaper and explain it.",
         "What's your most-used emoji? Show your keyboard.",
         "What's the last song you had on repeat?",
-        "Who in this room did you know the longest?",
+        "Who in this room have you known the longest?",
         "What's your comfort meal after a long day?",
         "Show the last photo you took on your phone.",
         "What's a small thing that instantly ruins your mood?",
         "What's your go-to karaoke song?",
         "What's the best purchase you made this year?",
-        "What's your most useless talent?",
+        "What's your most useless talent? Demonstrate it.",
         "If you could only eat one Kenyan dish forever, what is it?",
         "What's the last thing you Googled?",
         "What show are you low-key obsessed with right now?",
         "What's your toxic trait when you're hungry?",
         "Which app do you waste the most time on?",
         "What's your dream holiday destination?",
-        "What nickname did you have growing up?",
+        "What nickname did you have growing up? Who gave it to you?",
         "What's a trend you don't understand at all?",
         "What's the pettiest hill you'll die on?",
         "What's the most unhinged thing you've done out of boredom?",
         "Describe your vibe today in three words.",
         "What's your unpopular food opinion? Defend it.",
         "What's something you're embarrassingly bad at?",
-        "If your life had a theme song right now, what would it be?"
+        "If your life had a theme song right now, what would it be?",
+        "What's the most Kenyan thing about you that you'll never shake off?",
+        "Which celebrity would you have nyama choma with — and who's paying?",
+        "What's the worst job you've ever had?",
+        "What were you famous for in high school?",
+        "Which teacher still lives rent-free in your head, and why?",
+        "Describe the most chaotic message ever sent in your family WhatsApp group.",
+        "What's the weirdest thing you believed as a kid?",
+        "What's your go-to excuse for being late? We've all heard it.",
+        "What would your autobiography be called?",
+        "Where do you sit in a matatu, and why are you right?",
+        "What's the most overrated place in Nairobi?",
+        "What smell instantly takes you back to childhood?",
+        "What's the most random skill you learnt from YouTube?",
+        "If you hosted a Kenyan radio breakfast show, what would it be called?",
+        "What's the last thing that made you laugh until you cried?",
+        "Who's the most famous person you've ever met in real life?",
+        "What's your most irrational fear?",
+        "Which chore would you pay good money to never do again?",
+        "What's your signature dance move? Five seconds, go.",
+        "What word or phrase do you overuse? The group can help.",
+        "Show the group your screen time for today.",
+        "What did you want to be when you grew up — and what happened?",
+        "What's the best advice your cucu ever gave you?",
+        "What's your most controversial take on a Kenyan song?",
+        "If you could master one language overnight, which one and why?",
+        "What's your Christmas-in-shags survival strategy?",
+        "What's a food you pretend to like when you're visiting relatives?",
+        "What's the most embarrassing song on your playlist? Play 10 seconds.",
+        "What's the best compliment you've ever gotten from a stranger?",
+        "What's your biggest pet peeve on a matatu?",
+        "What's the pettiest reason you've unfollowed someone?",
+        "What's one thing on your bucket list you'll probably never do?",
+        "What's the worst haircut you've ever had? Show proof if you can.",
+        "What's a compliment someone gave you that you still think about?",
+        "What's the most you've ever done to avoid an awkward conversation?"
+      ],
+      "g": [
+        { "f": "mlt", "t": "show up an hour late and blame traffic" },
+        { "f": "mlt", "t": "go viral on TikTok by next year" },
+        { "f": "mlt", "t": "cry at a wedding — even a stranger's" },
+        { "f": "mlt", "t": "survive a week in shags with no phone" },
+        { "f": "mlt", "t": "start a chama and forget to contribute" },
+        { "f": "wyr", "a": "only eat githeri for a month", "b": "only drink uji for a month" },
+        { "f": "wyr", "a": "be stuck in Thika Road traffic forever", "b": "never leave your estate again" },
+        { "f": "wyr", "a": "your mum reads your WhatsApp", "b": "your boss reads your search history" },
+        { "f": "wyr", "a": "always have 3% battery", "b": "always have 50 bob in M-Pesa" },
+        { "f": "nhie", "t": "pretended my phone was off to avoid a call" },
+        { "f": "nhie", "t": "laughed at a joke I didn't understand" },
+        { "f": "nhie", "t": "fallen asleep in a matatu and missed my stage" },
+        { "f": "nhie", "t": "eaten food off the floor using the five-second rule" },
+        { "f": "hot", "t": "{p} is in the hot seat. Everyone gets one quick question. No skipping — hesitate and you {pay}." },
+        { "f": "hot", "t": "{p}, rate everyone here out of 10 on dress sense tonight. No ties allowed." }
       ]
     },
     "confessions": {
@@ -476,7 +531,7 @@ function confirmPurchase() {
         "Confess a time you got caught in a lie.",
         "What's the pettiest reason you've ghosted someone?",
         "What's a rumour about you that's actually true?",
-        "What's the most you've ever lied about on a CV or to impress someone?",
+        "What's the biggest lie you've told to impress someone?",
         "When did you last cry, and why?",
         "What's a secret you've never told anyone at this table?",
         "What's the worst thing you've done that you got away with?",
@@ -485,18 +540,70 @@ function confirmPurchase() {
         "What's the most childish thing you still do?",
         "Have you ever snooped through someone's phone? Whose?",
         "What's a purchase you're hiding from someone?",
-        "What's the last white lie you told, today?",
+        "What's the last white lie you told — today?",
         "What's something you pretend to understand but don't?",
         "What's the most embarrassing thing in your search history this week?",
-        "Have you ever faked being sick to avoid work? What did you do instead?",
+        "Have you ever faked being sick to skip work? What did you do instead?",
         "What's a compliment you gave that you didn't mean?",
         "What's the worst gift you've ever re-gifted?",
         "What's something everyone thinks you're good at, but you're faking?",
-        "Have you ever eavesdropped on a conversation that changed your mood?",
         "What's the most embarrassing thing you've sent to the wrong person?",
-        "What's a plan you cancelled at the last minute and had zero regrets?",
+        "What's a plan you cancelled last minute with zero regrets?",
         "Have you ever talked badly about someone who was in the next room?",
-        "What's the longest you've gone without replying to someone on purpose?"
+        "What's the longest you've left someone on 'read' on purpose?",
+        "What's the most embarrassing thing you've done to get out of church or a family meeting?",
+        "What did you steal as a kid? Did you ever return it?",
+        "What's the worst thing you've said about someone here behind their back?",
+        "Have you ever read someone's diary or private chats? What did you find?",
+        "What's a lie your parents still believe today?",
+        "What's the most embarrassing thing you did in boarding school?",
+        "Have you ever let a sibling take the punishment for something you did?",
+        "What's the most embarrassing thing you've ever cried over?",
+        "Which WhatsApp group have you secretly muted forever?",
+        "What's something you did while tipsy that nobody here knows about?",
+        "Have you ever faked a phone call to avoid talking to someone?",
+        "Is there a friendship you secretly wish would just… end?",
+        "What's something you judge people for that you've done yourself?",
+        "Whose chat did you last screenshot — and who did you send it to?",
+        "Have you ever cheated in an exam? How did you do it?",
+        "Have you ever pretended not to see someone you know in town? Who?",
+        "What's a secret you're keeping for someone else right now? No names.",
+        "What's the most jealous you've ever been of a friend?",
+        "What's the meanest thing you've ever said in an argument?",
+        "What's a rule at work or school you break every single week?",
+        "Have you ever taken credit for someone else's work?",
+        "What's your guiltiest pleasure that you'd never post?",
+        "What's a status you posted just to make someone jealous?",
+        "Have you ever viewed someone's status from a friend's phone so they wouldn't know?",
+        "What's the worst thing you ever did to a teacher?",
+        "Have you ever opened a message and pretended you never got it?",
+        "What's something from last year you still cringe about?",
+        "Have you ever been kicked out of somewhere? Where and why?",
+        "What's the most embarrassing thing your parents caught you doing?",
+        "Have you ever faked an emergency to escape a date or a party?",
+        "Who here have you been secretly annoyed with lately? Why?",
+        "Have you ever had a secret second account? What was it for?",
+        "What do you do when you're home alone that you'd die if anyone saw?",
+        "What's the most dramatic thing you've done for attention?",
+        "What's one memory you'd delete from your brain if you could?",
+        "What's one thing you'd never want your pastor or imam to find out?"
+      ],
+      "g": [
+        { "f": "nhie", "t": "said \"I'm on the way\" before leaving the house" },
+        { "f": "nhie", "t": "read someone's messages over their shoulder in a matatu" },
+        { "f": "nhie", "t": "stalked someone's profile and accidentally liked an old photo" },
+        { "f": "nhie", "t": "cried in the bathroom at a party" },
+        { "f": "nhie", "t": "blamed \"network issues\" for ignoring someone" },
+        { "f": "nhie", "t": "pretended to know the words to a song everyone was singing" },
+        { "f": "mlt", "t": "keep a secret for exactly 24 hours" },
+        { "f": "mlt", "t": "have a secret second WhatsApp number" },
+        { "f": "mlt", "t": "confess everything after two drinks" },
+        { "f": "mlt", "t": "be screenshotting this game for the group chat" },
+        { "f": "wyr", "a": "your browser history goes public", "b": "your last 20 voice notes go public" },
+        { "f": "wyr", "a": "confess your biggest secret to your parents", "b": "confess it to this group" },
+        { "f": "wyr", "a": "everyone here reads your mind for an hour", "b": "everyone here reads your DMs for a day" },
+        { "f": "hot", "t": "{p} is in the hot seat. Everyone asks one yes-or-no question. Get caught lying and you {pay2}." },
+        { "f": "hot", "t": "{p}, the group picks one person here. Tell them something honest you've never said to their face." }
       ]
     },
     "moneymatters": {
@@ -520,14 +627,68 @@ function confirmPurchase() {
         "Have you ever lied about how much something cost? To who?",
         "What's the pettiest thing you've split a bill over?",
         "What's your worst impulse buy this year?",
-        "How much do you spend on takeout in a week, honestly?",
+        "How much do you spend on takeout in a week — honestly?",
         "Who's the last person who owes you money, and how much?",
         "What's a purchase you'd never admit to your parents?",
         "What's your most expensive monthly habit?",
         "Describe your saving strategy in one word. Be honest.",
         "Have you ever sent money to a wrong number? What happened?",
         "What would you do differently with money if you could start over?",
-        "What's the worst financial advice you've ever followed?"
+        "What's the worst financial advice you've ever followed?",
+        "What's the biggest amount you've ever Fuliza'd — and what was it for?",
+        "What's the most you've ever contributed to a harambee?",
+        "Have you ever pretended to be broke when a friend asked to borrow?",
+        "What's the most expensive thing you've ever broken?",
+        "What's your biggest side hustle flop?",
+        "What's the most you've lost on a bet?",
+        "What's the most money you 'lost' that you actually spent on yourself?",
+        "Have you ever faked being broke to skip a bill split?",
+        "What's the most you've spent on someone who didn't deserve it?",
+        "What's the cheapest date you've ever taken someone on?",
+        "What's the most you've ever spent on one meal?",
+        "You have 500 bob for the whole week. Walk us through the plan.",
+        "Which friend here is broke by the 10th of every month?",
+        "Have you ever joined a chama just for the vibes — then quit?",
+        "What's something you bought purely to show off?",
+        "Have you ever hidden shopping bags from someone at home?",
+        "What's your payday ritual?",
+        "How many days does your salary actually last? Be honest.",
+        "What's the most embarrassing thing you've done to save money?",
+        "What's the worst investment or 'opportunity' you've fallen for?",
+        "Have you ever acted like you'd pay on a date, then asked to split?",
+        "What's the most you've spent on data or airtime in a month?",
+        "Which relative would you send 50k to tomorrow, no questions asked?",
+        "What would you sell right now for 20k cash?",
+        "What's the most you've paid for a haircut or hairdo?",
+        "What's the most expensive thing you own that you barely use?",
+        "What's your honest monthly budget for going out?",
+        "Have you ever disappeared to the bathroom right when the bill came?",
+        "If you won 10 million, who's the first person you'd hide from?",
+        "What's the biggest money lie you've told your parents?",
+        "What's the dumbest thing you've ever spent a bonus on?",
+        "Has an ex ever asked you for money after the breakup? Did you send it?",
+        "What's a luxury you'll never give up, even when you're broke?",
+        "Describe your bank balance using only a Kenyan song title.",
+        "Who's the unofficial bank in your family? Is it you?",
+        "What's the most you've paid for a single drink?",
+        "What's the longest you've avoided a friend because you owed them?"
+      ],
+      "g": [
+        { "f": "mlt", "t": "be on Fuliza by the 15th" },
+        { "f": "mlt", "t": "become a millionaire and still ask for change" },
+        { "f": "mlt", "t": "join a pyramid scheme \"just to see\"" },
+        { "f": "mlt", "t": "split a 300-bob bill down to the last shilling" },
+        { "f": "mlt", "t": "spend the rent money on one weekend" },
+        { "f": "wyr", "a": "get 1 million bob today", "b": "get 20k every month for life" },
+        { "f": "wyr", "a": "be rich but everyone can see your balance", "b": "be comfortable and totally private" },
+        { "f": "wyr", "a": "never pay rent again", "b": "never pay for food again" },
+        { "f": "wyr", "a": "lend your best friend 100k", "b": "say no to their face" },
+        { "f": "nhie", "t": "sent money to the wrong number" },
+        { "f": "nhie", "t": "ignored a relative's \"hi\" because I knew what was coming" },
+        { "f": "nhie", "t": "checked my balance and gone quiet for the rest of the day" },
+        { "f": "nhie", "t": "borrowed money to go out and look rich" },
+        { "f": "hot", "t": "{p}, everyone guesses how much you spent last weekend. Reveal the truth — closest guess picks someone to {pay}." },
+        { "f": "hot", "t": "{p}, answer fast: last thing you bought, most expensive thing you own, who owes you money. Hesitate and you {pay}." }
       ]
     },
     "loveandexes": {
@@ -549,18 +710,70 @@ function confirmPurchase() {
         "Have you ever been caught stalking someone online?",
         "What's the pettiest reason you've turned someone down?",
         "Who was your first celebrity crush?",
-        "What's the cheesiest thing you've ever said to someone?",
+        "What's the cheesiest line you've ever used on someone?",
         "Have you ever dated two people at once? Spill.",
         "What's your type, in three words?",
-        "Show the last person you texted a heart emoji to.",
-        "What's the longest you've gone stalking someone's profile?",
+        "Show the last person you sent a heart emoji to.",
+        "What's the deepest you've scrolled on someone's profile?",
         "Who's the one that got away?",
         "What's a lie you've told on a first date?",
-        "If your last relationship had a title, what would it be?",
+        "If your last relationship was a movie, what's the title?",
         "What's the most romantic thing you've done that flopped completely?",
         "Have you ever pretended to be busy to avoid someone you liked?",
         "What's your most embarrassing 'caught feelings' moment?",
-        "Read the last message from your most recent ex — or sip twice."
+        "Read the last message from your most recent ex — or {pay2}.",
+        "What's the most toxic thing you've done in a relationship?",
+        "Who was your first kiss, and how bad was it?",
+        "Have you ever gone back to an ex? How did that end?",
+        "What's the longest situationship you've been in without a label?",
+        "What's the worst pickup line that actually worked on you?",
+        "Have you ever cried over someone who didn't even know you liked them?",
+        "What's the most expensive thing you bought for someone who then left?",
+        "Have you ever found out you were the 'other person'?",
+        "What's the craziest thing you've done after a breakup?",
+        "Would you date someone's ex from this group? Whose?",
+        "Describe your worst kiss. No names — just details.",
+        "What's your love language, and what does it say about you?",
+        "What's the most embarrassing thing you've done in front of a crush?",
+        "Have you ever been ghosted? How long until you figured it out?",
+        "Have you ever ghosted someone who really didn't deserve it?",
+        "Rate your last relationship out of 10. Defend the score.",
+        "Which song reminds you of an ex? Play 10 seconds.",
+        "What's the fastest you've ever caught feelings?",
+        "Have you ever had a crush on a friend's partner?",
+        "What's one thing about your ex you secretly still miss?",
+        "What's the most jealous you've been in a relationship?",
+        "Have you ever checked a partner's phone? What did you find?",
+        "What's the longest you've waited for someone to text back?",
+        "What's the worst reason you've broken up with someone?",
+        "In your last relationship, who always texted first?",
+        "Have you ever had a crush on a teacher or lecturer?",
+        "What's the most public place you've had a relationship fight?",
+        "Show the group your last 'good morning' text.",
+        "Who's the last person you drunk-texted? What did you say?",
+        "Would your ex call you the villain? Why?",
+        "Have you ever met someone's parents way too early?",
+        "What's the biggest lie you've told a partner?",
+        "What's something you pretended to enjoy for a partner?",
+        "How many people are you 'just talking to' right now?",
+        "How many cows are you worth at your ruracio? The group votes if that's fair."
+      ],
+      "g": [
+        { "f": "mlt", "t": "get back with their ex this year" },
+        { "f": "mlt", "t": "have a secret crush on someone here" },
+        { "f": "mlt", "t": "fall in love on a matatu" },
+        { "f": "mlt", "t": "propose at a KFC" },
+        { "f": "mlt", "t": "get married first" },
+        { "f": "wyr", "a": "your ex reads your diary", "b": "your parents read your DMs" },
+        { "f": "wyr", "a": "date someone broke with amazing vibes", "b": "date someone rich with zero personality" },
+        { "f": "wyr", "a": "get back with your last ex", "b": "stay single for two years" },
+        { "f": "wyr", "a": "your partner is best friends with your ex", "b": "your partner hates your best friend" },
+        { "f": "nhie", "t": "stalked my ex's new partner" },
+        { "f": "nhie", "t": "texted an ex \"hey stranger\"" },
+        { "f": "nhie", "t": "been in love with two people at the same time" },
+        { "f": "nhie", "t": "gone on a date just for the free food" },
+        { "f": "hot", "t": "{p}, rate your last three dates out of 10. Everyone gets one follow-up question." },
+        { "f": "hot", "t": "{p}, read the last message from anyone you've ever flirted with — or {pay2}." }
       ]
     },
     "friendsroast": {
@@ -572,7 +785,7 @@ function confirmPurchase() {
         "Who at this table gives the worst advice?",
         "Who here is most likely to get famous, and for what?",
         "Who's the messiest person in this room?",
-        "Rank the people here by who'd survive longest with no phone.",
+        "Rank everyone here by how long they'd survive with no phone.",
         "Who's most likely to text their ex tonight?",
         "Who here has the worst taste in partners?",
         "Who's the biggest drama magnet at this table?",
@@ -580,19 +793,72 @@ function confirmPurchase() {
         "Who's most likely to become a millionaire? Who's most likely to lose it all?",
         "Who here takes the longest to reply to texts?",
         "Who's the worst driver in this room?",
-        "Who would last the shortest in Big Brother?",
+        "Who would get voted out of Big Brother first?",
         "Point at the biggest overthinker here.",
         "Who's most likely to start a business and abandon it in a month?",
-        "Who's the cheapest person at this table?",
-        "Who here is most likely to fake their own glow-up?",
+        "Who's the stingiest person at this table?",
+        "Who here is most likely to fake a glow-up with filters?",
         "Who gives the best hugs? Who gives the worst?",
-        "Who's the funniest person here — and who thinks they are but isn't?",
-        "Who would you NOT want to be stuck in traffic with on Thika Road?",
+        "Who's the funniest person here — and who only thinks they are?",
+        "Who would you NOT want to be stuck in Thika Road traffic with?",
         "If this group were a reality show, who gets voted off first?",
-        "Who here is most likely to flirt their way out of a speeding ticket?",
+        "Who here would flirt their way out of a police stop?",
         "Who has the most unhinged group chat energy?",
-        "If someone at this table had a warning label, what would it say?",
-        "Who here is most likely to accidentally start a rumour?"
+        "If someone here came with a warning label, what would it say?",
+        "Who here is most likely to accidentally start a rumour?",
+        "Who here would die first in a horror movie, and how?",
+        "Who had the most embarrassing Instagram back in 2016?",
+        "Who here would you never lend your car to?",
+        "Who's the worst at keeping plans?",
+        "Who's the most dramatic when they're sick?",
+        "Who here would sell out the whole group for 10k?",
+        "Who's most likely to get arrested — for something really stupid?",
+        "Who has the loudest laugh here? Do an impression.",
+        "Who here would be your worst roommate? Why?",
+        "Who's most likely to reply 'k' to a long paragraph?",
+        "Who here would last one day as a matatu conductor?",
+        "Who's the biggest liar at this table?",
+        "Who's the worst at taking photos of other people?",
+        "Who here thinks they can sing but really can't?",
+        "Who here would get lost in their own estate?",
+        "Whose search history is the most unhinged? Everyone guesses.",
+        "Who here would be the most chaotic parent? Lovingly.",
+        "Match everyone here to a Kenyan politician. Explain yourself.",
+        "Who here is still not over their ex?",
+        "Who would marry for money first?",
+        "Who here has the most 'I know a guy' energy?",
+        "Describe the person on your left using only a matatu slogan.",
+        "Who here always 'forgets' their wallet?",
+        "Who's most likely to cry during this game?",
+        "Who's the worst cook here? Name the dish that proved it.",
+        "Who survives longest in a zombie apocalypse in Nairobi?",
+        "Who's most likely to go viral for all the wrong reasons?",
+        "Who here posts the most thirst traps?",
+        "Who has the worst taste in music? Prove it.",
+        "If this group were a WhatsApp group: who's the admin, who lurks, who forwards fake news?",
+        "Who's the first person here you'd call from a police station at 3am? And the last?",
+        "Who here peaked in high school?",
+        "Who here definitely has a secret TikTok account?",
+        "Roast the person on your right in one sentence. Make it sting a little.",
+        "Who's the biggest 'I'm five minutes away' liar?",
+        "Who here would be the worst person to be stuck on a desert island with?"
+      ],
+      "g": [
+        { "f": "mlt", "t": "be late to their own wedding" },
+        { "f": "mlt", "t": "reply to the group chat three days later" },
+        { "f": "mlt", "t": "get scammed on Marketplace" },
+        { "f": "mlt", "t": "fight a conductor over 20 bob" },
+        { "f": "mlt", "t": "become a pastor — or a politician" },
+        { "f": "mlt", "t": "have a mugshot that goes viral" },
+        { "f": "wyr", "a": "get roasted by everyone here for two minutes", "b": "roast everyone here with a straight face for two minutes" },
+        { "f": "wyr", "a": "swap wardrobes with the person on your left for a week", "b": "swap phones with the person on your right for an hour" },
+        { "f": "wyr", "a": "be the funniest person here", "b": "be the best-looking person here" },
+        { "f": "nhie", "t": "talked about someone in this room in a different group chat" },
+        { "f": "nhie", "t": "been jealous of someone at this table" },
+        { "f": "nhie", "t": "copied the outfit of someone here" },
+        { "f": "hot", "t": "{p} is getting roasted. Everyone gets one sentence. Take it like a champ — or {pay} to shut them up." },
+        { "f": "hot", "t": "{p}, rank everyone here from most to least likely to be successful. Out loud." },
+        { "f": "hot", "t": "{p}, give everyone at the table a yearbook superlative. Go." }
       ]
     },
     "spicy": {
@@ -608,24 +874,76 @@ function confirmPurchase() {
         "What's a secret talent you'd only show someone you're into?",
         "What's the most reckless thing you've done for a night out?",
         "What's your biggest 'ick'?",
-        "Have you ever left a party without telling anyone? Why?",
+        "Have you ever left a party without telling anyone? Who did you leave with?",
         "What's the most trouble you've been in with your parents as an adult?",
         "What's a text you're glad you deleted?",
         "What's the most spontaneous thing you've ever done?",
         "Who in this room would you swap lives with for a wild weekend?",
-        "What's your most embarrassing drunk story? (keep it PG-ish)",
+        "What's your most embarrassing drunk story?",
         "What's a rule you love breaking?",
         "What's the pettiest revenge you've ever taken?",
         "What's the boldest outfit you've ever worn out?",
-        "What's a secret you'd take to the grave — hint at it?",
+        "What's a secret you'd take to the grave? Give us a hint.",
         "What's the most 'main character' thing you've ever done?",
-        "What's the most scandalous thing that's happened at a house party you attended?",
-        "What's a compliment someone gave you that you still think about?",
-        "What's the one thing you'd do if no one was watching tonight?",
+        "What's the most scandalous thing you've seen at a house party?",
+        "What's the one thing you'd do tonight if no one was watching?",
         "Have you ever snuck out of somewhere? Tell the story.",
-        "What's a decision you made at 2am that you'd make again?",
+        "What's a 2am decision you'd make again?",
         "What's the most daring thing on your bucket list?",
-        "Say the name of the person in your phone you're most nervous about."
+        "Say the name of the person in your phone you're most nervous about.",
+        "What's the most attractive thing someone can do without even trying?",
+        "Who in this room has the best smile? Look at them while you say it.",
+        "What's the boldest text you've ever sent to someone you liked?",
+        "What's your biggest turn-off that most people find attractive?",
+        "Rate your flirting out of 10. Now use your best line on the person to your right.",
+        "What's the most daring outfit you'd wear for someone you like?",
+        "Have you ever had a crush on someone in this room? Yes or no.",
+        "What's the wildest thing you've done on a night out in Westlands?",
+        "What's the most scandalous DM you've ever received?",
+        "What's the longest you've stayed out without telling anyone where you were?",
+        "Describe a fantasy date you've never told anyone about.",
+        "Have you ever kissed someone you'd only met that night?",
+        "Who in your contacts would you call for a late-night adventure?",
+        "What's the most embarrassing thing that's happened to you on a date after midnight?",
+        "What's your go-to move when you want someone to notice you?",
+        "Have you ever flirted your way out of trouble? How?",
+        "Which photo of yours got the most attention? Show it.",
+        "What do you find attractive that you'd never admit on a first date?",
+        "What's the most reckless decision you've made because someone was cute?",
+        "Who left you on 'read' and still lives in your head?",
+        "Have you ever been caught somewhere you really shouldn't have been?",
+        "What's the most awkward steamy scene you've watched with your parents in the room?",
+        "Describe your perfect night out in three words. Make them count.",
+        "What's the naughtiest thing you've done in public? Nothing that needs a lawyer.",
+        "What's the biggest age gap you'd honestly consider?",
+        "Have you had a dream about someone in this room? Who?",
+        "Who here would you trust to plan a wild weekend in Diani?",
+        "What's the most 'not me' thing you've done for someone you fancied?",
+        "How many hearts have you broken? Estimate.",
+        "Have you ever hit 'Delete for everyone' in a panic? What was it?",
+        "What's something you did at a wedding reception that you shouldn't have?",
+        "What's your most shameless flirting story?",
+        "Who's the most attractive person you've unfollowed out of jealousy?",
+        "If you had to go on a date with someone here, who — and where are you taking them?",
+        "What's the most you've ever lied about where you were on a Friday night?",
+        "What's a secret about your love life that would shock this group?"
+      ],
+      "g": [
+        { "f": "nhie", "t": "kissed someone in a car" },
+        { "f": "nhie", "t": "had a crush on a friend's sibling" },
+        { "f": "nhie", "t": "kissed two different people on the same night" },
+        { "f": "nhie", "t": "gone skinny-dipping" },
+        { "f": "nhie", "t": "flirted to skip a queue" },
+        { "f": "nhie", "t": "lied about where I was last Friday night" },
+        { "f": "mlt", "t": "have a secret admirer at this table" },
+        { "f": "mlt", "t": "kiss a stranger on New Year's" },
+        { "f": "mlt", "t": "leave the party with someone they just met" },
+        { "f": "mlt", "t": "have the wildest DMs in this room" },
+        { "f": "wyr", "a": "kiss someone with bad breath", "b": "kiss someone who's a terrible kisser" },
+        { "f": "wyr", "a": "your crush sees your search history", "b": "your crush sees your screen time" },
+        { "f": "wyr", "a": "a wild night in Diani", "b": "a cosy weekend in Naivasha — with anyone here" },
+        { "f": "hot", "t": "{p}, the group picks someone here. Say one thing you find attractive about them — or {pay2}." },
+        { "f": "hot", "t": "{p}, answer fast: best kiss, worst date, current crush (no names needed). Hesitate and you {pay}." }
       ]
     }
   },
@@ -638,46 +956,133 @@ function confirmPurchase() {
       "Do 10 squats while singing the national anthem.",
       "Call a random contact and sing them happy birthday.",
       "Show the group your best gengetone dance move.",
-      "Let the person on your left check your phone wallpaper.",
       "Swap one item of clothing with the person on your right for two rounds.",
-      "Do an impression of someone in this room until they guess who.",
+      "Do an impression of someone in this room until they guess who it is.",
       "Speak in a British accent until your next turn.",
       "Post 'making questionable decisions tonight' on your status.",
-      "Let the group pick your WhatsApp profile pic for 10 minutes.",
-      "Do your best ugali-serving flex.",
-      "Recite a line from any Vitimbi or Papa Shirandula scene.",
+      "Let the group pick your WhatsApp profile picture for 10 minutes.",
+      "Recite a famous line from any Kenyan TV show. Full drama.",
       "Compliment everyone at the table — no repeats.",
-      "Text 'we need to talk' to a friend, then immediately say 'jk'.",
+      "Text 'we need to talk' to a friend, then wait one minute before saying 'jk'.",
       "Let the person across from you send one emoji to your last chat.",
       "Do your best runway walk across the room.",
-      "Talk in a whisper until it's your turn again.",
+      "Whisper everything until it's your turn again.",
       "Let the group give you a new nickname for the rest of the night.",
-      "Do your best news anchor impression reading the last text you received.",
+      "Read the last text you received like a news anchor.",
       "Hold a plank until the next person finishes their turn.",
-      "Sing your request instead of saying it for the next two rounds.",
-      "Do your best celebrity impression until someone guesses.",
+      "Sing everything you say for the next two rounds.",
+      "Do a celebrity impression until someone guesses who.",
       "Let someone screenshot your most recent photo and caption it.",
-      "Say three nice things about the person to your right — make them genuinely feel it.",
+      "Say three nice things about the person on your right — make them feel it.",
       "Do a 30-second stand-up comedy set about the group.",
-      "Attempt the TikTok dance everyone knows — perform it in full.",
+      "Perform the TikTok dance everyone knows. Full routine.",
       "Let the group read your most recent DM conversation out loud.",
-      "Send a voice note to any contact right now saying 'I miss you'.",
-      "Do your best impression of a Kenyan politician giving a speech."
+      "Send a voice note to any contact saying 'I miss you'. No explanation.",
+      "Do your best Kenyan politician campaign speech.",
+      "Let the group scroll your gallery for 10 seconds. No grabbing it back.",
+      "Call your mum on speaker and tell her you love her.",
+      "Preach a two-minute sermon on why this group needs deliverance.",
+      "Speak like a KBC news anchor until your next turn.",
+      "Let the person on your left post a WhatsApp status for you. It stays for 10 minutes.",
+      "Balance a spoon on your nose for 10 seconds. You get three tries.",
+      "Read your last five WhatsApp messages as a dramatic Nollywood scene.",
+      "Serenade the person across from you with a Bongo love song.",
+      "Do as many push-ups as you can while the group counts in Swahili.",
+      "Let the group write your WhatsApp 'About' for the rest of the night.",
+      "Send 'Mambo vipi? Long time 👀' to the 7th person in your chats.",
+      "Act out a matatu breaking down — you're the driver, conductor, and angry passenger.",
+      "Be a mama mboga negotiating prices with the person on your left.",
+      "Tell a joke. If nobody laughs, tell another one.",
+      "Talk without closing your lips until your next turn.",
+      "Show the group the last five people you called.",
+      "Freestyle four bars about the person on your right.",
+      "The group picks a contact. Text them 'I had a dream about you.'",
+      "Do the chicken dance for 20 seconds with full commitment.",
+      "Give a tour of this room like it's a Maasai Mara safari.",
+      "Give a 30-second TED talk on a topic the group picks.",
+      "Copy everything the person on your left does until your next turn.",
+      "Let someone draw a moustache on you — pen or lipstick, your choice.",
+      "Say the alphabet backwards. The group counts your mistakes.",
+      "Sing 'Jambo Bwana' in your most dramatic opera voice.",
+      "Negotiate a boda boda fare with the person on your right. They're the rider.",
+      "Show your most embarrassing photo from at least three years ago.",
+      "Put your phone face up in the middle for three rounds. Anyone can read your notifications aloud.",
+      "Call a friend and convince them you're joining a monastery.",
+      "Speak like a toddler until your next turn.",
+      "Give a 20-second pep talk to the person with the most sips.",
+      "Let the group rename one contact in your phone. It stays for 24 hours.",
+      "Re-enact your most embarrassing fall in slow motion.",
+      "Wear your top inside out for the rest of the game.",
+      "Mime a famous Kenyan TV ad until someone guesses it.",
+      "Laugh non-stop for 20 seconds. No breaks.",
+      "Speak only in questions until your next turn.",
+      "Let the person on your right style your hair however they want.",
+      "Do a victory lap around the room like you just broke a marathon record.",
+      "Read your last Google search out loud and explain it.",
+      "Let the person on your left type one message to a contact you choose. You can't read it first.",
+      "Start a three-part harmony. Anyone who joins you is spared their next sip.",
+      "Act out a Tahidi High classroom scene with the person on your right.",
+      "Make the person on your left laugh within 30 seconds.",
+      "Tell everyone what you honestly thought of them when you first met.",
+      "Give a heartfelt toast to the person you know least here.",
+      "Leave the room and make a celebrity-level entrance.",
+      "Say something nice about the host in Sheng, Swahili, and English.",
+      "Write a two-line love poem to the nearest snack and perform it.",
+      "Do your best impression of your mum calling you for supper.",
+      "Let the group choose a song. Lip-sync it like it's the finale.",
+      "Answer every question with 'Sawa sawa' until your next turn."
     ]
-  }
+  },
+  "spicyDares": [
+    "Send your crush a single 🔥 emoji. No context.",
+    "Whisper something flirty to the person on your right — if they're up for it.",
+    "Do your most seductive walk across the room.",
+    "Read your most recent flirty message out loud in a dramatic voice.",
+    "Let the group write a pickup line. Send it to anyone in your chats you choose.",
+    "Offer the person on your left a 30-second shoulder massage. Only if they say yes.",
+    "Serenade someone here like it's your wedding day.",
+    "Describe your ideal first kiss in slow, dramatic detail.",
+    "Text your ex 'I found something of yours.' Say nothing more.",
+    "Do a 20-second body roll. Full commitment.",
+    "The group picks someone here. Flirt with them for 30 seconds — cheesy lines only.",
+    "Show the group the last selfie you took but never posted.",
+    "Slow dance with anyone willing for one full chorus.",
+    "Set your WhatsApp status to 'Taken 😏' for one hour.",
+    "Post a story that just says 'feeling dangerous tonight'.",
+    "Call someone you've flirted with, on speaker, and ask about their weekend plans.",
+    "Show us exactly how you flirt when you're tipsy.",
+    "Hold eye contact with the person across from you for 30 seconds. First to laugh loses.",
+    "Let the person on your right read your last three Instagram DMs.",
+    "Rate everyone's kissing potential out of 10 — just by looking at them."
+  ]
 };
 
 CONTENT.breakers = [
   { icon:"🍻", title:"EVERYBODY DRINKS", text:"Group sip! Everyone takes one — cheers." },
   { icon:"🔄", title:"REVERSE ORDER", text:"The turn order flips. Play now goes the other way." },
-  { icon:"🍺🍺", title:"DOUBLE OR NOTHING", text:"Answer this one honestly, or take TWO sips." },
-  { icon:"🍀", title:"LUCKY ESCAPE", text:"You're off the hook! Skip your turn, no sip needed." },
-  { icon:"👉", title:"PASS IT ON", text:"Pick someone else to answer the next question for you." },
-  { icon:"🎤", title:"TABLE TALK", text:"Everyone answers this out loud: what's your current guilty pleasure?" },
-  { icon:"🤳", title:"SNAP CHECK", text:"Show the group the last photo in your camera roll — or take a sip." },
-  { icon:"👑", title:"CROWN THE HOST", text:"The player with the most sips so far makes a rule everyone must follow for 3 rounds." },
+  { icon:"🍺🍺", title:"DOUBLE OR NOTHING", text:"{p}, the next person's question is yours too. Answer it honestly, or {pay2}." },
+  { icon:"🍀", title:"LUCKY ESCAPE", text:"{p}, you're off the hook! Skip your turn — no penalty." },
+  { icon:"👉", title:"PASS IT ON", text:"{p}, pick someone else to answer the next question for you." },
+  { icon:"🎤", title:"TABLE TALK", text:"Everyone answers out loud: what's your current guilty pleasure?" },
+  { icon:"🤳", title:"SNAP CHECK", text:"Everyone shows the last photo in their camera roll. Refuse and you {pay}." },
+  { icon:"👑", title:"CROWN THE HOST", text:"Whoever has the most sips makes a rule everyone follows for 3 rounds." },
   { icon:"🔀", title:"SWAP SEATS", text:"Everyone shifts one seat to the left. New neighbours, new energy." },
-  { icon:"🗳️", title:"MOST LIKELY TO", text:"On the count of 3, everyone points at who's most likely to text their ex tonight. Most votes drinks." }
+  { icon:"🗳️", title:"SNAP VOTE", text:"On 3, everyone points at who'll fall asleep first tonight. Most votes {pays}." },
+  { icon:"🤐", title:"NO NAMES", text:"Until {p}'s next turn, nobody can say anyone's name. Slip up and you {pay}." },
+  { icon:"🗣️", title:"SHENG ONLY", text:"For one full round, English is banned. Sheng and Swahili only. Slip up and you {pay}." },
+  { icon:"👍", title:"THUMB MASTER", text:"{p} is Thumb Master. Whenever they quietly put a thumb on the table, the last person to copy {pays}. Lasts until the next Wild Card." },
+  { icon:"❓", title:"QUESTION MASTER", text:"{p} is Question Master for 3 rounds. Anyone who answers one of their questions {pays}." },
+  { icon:"🤝", title:"BUDDY SYSTEM", text:"{p}, pick a buddy. Whenever one of you {pays}, so does the other — until the next Wild Card." },
+  { icon:"⏱️", title:"SPEED ROUND", text:"Go round the circle naming Kenyan musicians. Repeat one or freeze and you {pay}." },
+  { icon:"🏘️", title:"CATEGORIES", text:"Go round the circle naming Nairobi estates. Repeat one or freeze and you {pay}." },
+  { icon:"🍛", title:"FOOD FIGHT", text:"Go round the circle naming Kenyan dishes. Repeat one or freeze and you {pay}." },
+  { icon:"🥂", title:"TOAST TIME", text:"{p}, raise a toast to someone here and say why. Everyone drinks to it." },
+  { icon:"🎭", title:"IDENTITY SWAP", text:"{p} and the person on their right swap names for a full round. Use the wrong name and you {pay}." },
+  { icon:"📵", title:"PHONES DOWN", text:"All phones face down in the middle. First to touch theirs before the next Wild Card {pays}." },
+  { icon:"🎟️", title:"FREE PASS", text:"{p} gets a free pass: skip any one future question, no penalty. Use it wisely." },
+  { icon:"💘", title:"RELATIONSHIP STATUS", text:"Single? Sip. Taken? Sip. It's complicated? Sip twice and explain." },
+  { icon:"😐", title:"STRAIGHT FACE", text:"{p} has 20 seconds to make anyone laugh. First to crack {pays}." },
+  { icon:"🔦", title:"SPOTLIGHT", text:"Everyone points at whoever's been quietest tonight. They choose who answers the next card." }
 ];
 </script>
 <script>
@@ -904,14 +1309,79 @@ function stopTimer(){
 }
 
 /* ============ GAME ============ */
+/* ============ NO-REPEAT MEMORY ============
+   Remembers every card shown (across games, on this phone).
+   A card only comes back once the chosen decks are nearly used up. */
+const SEEN_KEY = 'tos_seen_v1';
+let _seen = {};
+try { _seen = JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; } catch(e) { _seen = {}; }
+function saveSeen(){ try{ localStorage.setItem(SEEN_KEY, JSON.stringify(_seen)); }catch(e){} }
+function markSeen(id){ if(!id) return; _seen[id] = 1; saveSeen(); }
+function cardId(prefix, item){
+  const s = typeof item === 'string' ? item : JSON.stringify(item);
+  let h = 0; for(let i=0;i<s.length;i++){ h = (Math.imul(h,31) + s.charCodeAt(i)) | 0; }
+  return prefix + ':' + (h>>>0).toString(36);
+}
+// Unseen cards first. If fewer than minLeft remain, recycle the seen ones underneath.
+function freshPile(all, minLeft){
+  const fresh = all.filter(o => !_seen[o.id]);
+  if(fresh.length >= minLeft) return shuffle(fresh);
+  const stale = all.filter(o => _seen[o.id]);
+  stale.forEach(o => { delete _seen[o.id]; });
+  saveSeen();
+  return shuffle(stale).concat(shuffle(fresh)); // pop() takes from the end, so fresh cards come first
+}
+// Never two group cards in a row
+function spreadGroups(pile){
+  for(let i=1;i<pile.length;i++){
+    if(pile[i].kind==='group' && pile[i-1].kind==='group'){
+      for(let j=i+1;j<pile.length;j++){ if(pile[j].kind!=='group'){ const t=pile[i]; pile[i]=pile[j]; pile[j]=t; break; } }
+    }
+  }
+  return pile;
+}
+function dareList(){
+  const list = CONTENT.dares.q.map(d => ({ text:d, id:cardId('dare', d) }));
+  if(S.cats.includes('spicy') && CONTENT.spicyDares) CONTENT.spicyDares.forEach(d => list.push({ text:d, id:cardId('sdare', d) }));
+  return list;
+}
 function buildPool(){
-  let pool = [];
+  const all = [];
   S.cats.forEach(key => {
     const c = CONTENT.categories[key];
-    c.q.forEach(text => pool.push({ text, cat:c.name, emoji:c.emoji }));
+    c.q.forEach(text => all.push({ kind:'truth', text, cat:c.name, emoji:c.emoji, id:cardId(key, text) }));
+    (c.g || []).forEach(g => all.push({ kind:'group', g, cat:c.name, emoji:c.emoji, id:cardId(key, g) }));
   });
-  S.pool = shuffle(pool);
-  S.dares = shuffle(CONTENT.dares.q.slice());
+  S.pool = spreadGroups(freshPile(all, 15));
+  S.dares = freshPile(dareList(), 8);
+}
+
+/* ============ CARD TEXT ============ */
+function esc(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function pen(k){
+  const dry = S.mode === 'dare';
+  return ({ pay: dry ? 'do a dare' : 'sip', pay2: dry ? 'do a dare' : 'sip twice', pays: dry ? 'does a dare' : 'sips' })[k];
+}
+function fillText(t){ return String(t).replace(/\{p\}/g, esc(currentPlayer())).replace(/\{(pay2|pays|pay)\}/g, (_,k) => pen(k)); }
+function setCardText(html){
+  const el = document.getElementById('card-text');
+  el.innerHTML = html;
+  const len = el.textContent.length;
+  el.style.fontSize = len > 150 ? '18px' : len > 105 ? '21px' : '';
+}
+const FORMATS = {
+  mlt:  { label:'Most Likely To',    icon:'👉' },
+  wyr:  { label:'Would You Rather',  icon:'⚖️' },
+  nhie: { label:'Never Have I Ever', icon:'🙊' },
+  hot:  { label:'Hot Seat',          icon:'🪑' }
+};
+function groupHTML(g){
+  const tag = t => '<span class="dare-tag" style="color:var(--wine-deep)">✦ ' + t + ' ✦</span><br>';
+  const rule = t => '<span class="fmt-rule">' + t + '</span>';
+  if(g.f === 'mlt')  return tag('Everyone plays') + "Who's most likely to " + fillText(g.t) + '?' + rule('On 3, everyone points. Most fingers ' + pen('pays') + '.');
+  if(g.f === 'wyr')  return tag('Everyone picks') + 'Would you rather…<span class="wyr-opt">' + fillText(g.a) + '</span><span class="wyr-or">or</span><span class="wyr-opt">' + fillText(g.b) + '</span>' + rule('On 3, everyone picks a side. The smaller side ' + pen('pays') + '. Tie? Everyone does.');
+  if(g.f === 'nhie') return tag('Everyone plays') + 'Never have I ever ' + fillText(g.t) + '.' + rule('If you have, ' + pen('pay') + '. No lying — this group knows.');
+  return tag(esc(currentPlayer()) + ' is on the spot') + fillText(g.t);
 }
 function startGame(){
   if(S.cats.length === 0){ document.getElementById('cat-warn').textContent = "Pick at least one topic."; return; }
@@ -949,9 +1419,11 @@ function drawTruth(){
   S.lastWasBreaker = false;
   if(S.pool.length === 0) buildPool();
   const item = S.pool.pop();
+  markSeen(item.id);
+  if(item.kind === 'group'){ showGroupCard(item); return; }
   document.getElementById('card-cat').textContent = item.cat;
   document.getElementById('card-emoji').textContent = item.emoji;
-  document.getElementById('card-text').innerHTML = item.text;
+  setCardText(esc(item.text));
   document.getElementById('truth-actions').style.display = 'flex';
   document.getElementById('continue-btn').style.display = 'none';
   document.getElementById('cardEl').style.setProperty('--deckcolor','var(--wine)');
@@ -964,15 +1436,33 @@ function drawTruth(){
   saveSession();
 }
 
+function showGroupCard(item){
+  stopTimer();
+  const f = FORMATS[item.g.f] || FORMATS.hot;
+  document.getElementById('card-cat').textContent = f.label;
+  document.getElementById('card-emoji').textContent = f.icon;
+  setCardText(groupHTML(item.g));
+  document.getElementById('truth-actions').style.display = 'none';
+  document.getElementById('continue-btn').style.display = 'block';
+  document.getElementById('cardEl').style.setProperty('--deckcolor','var(--gold)');
+  const h = document.getElementById('swipe-hint');
+  if(h && !h.classList.contains('hide')) h.textContent = 'swipe or tap Next →';
+  const el = document.getElementById('cardEl');
+  el.style.animation='none'; void el.offsetWidth; el.style.animation='pop .22s ease';
+  buzz('MEDIUM');
+  saveSession();
+}
+
 function showBreaker(){
   stopTimer();
   S.lastWasBreaker = true;
-  if(!S.breakerPile || S.breakerPile.length === 0) S.breakerPile = shuffle(CONTENT.breakers.slice());
-  const b = S.breakerPile.pop();
+  if(!S.breakerPile || S.breakerPile.length === 0) S.breakerPile = freshPile(CONTENT.breakers.map(b => ({ b, id:cardId('wild', b.title) })), 5);
+  const o = S.breakerPile.pop();
+  const b = o.b || o;
+  markSeen(o.id);
   document.getElementById('card-cat').textContent = 'Wild Card';
   document.getElementById('card-emoji').textContent = b.icon;
-  document.getElementById('card-text').innerHTML =
-    '<span class="dare-tag" style="color:var(--gold)">✦ ' + b.title + ' ✦</span><br>' + b.text;
+  setCardText('<span class="dare-tag" style="color:var(--gold)">✦ ' + b.title + ' ✦</span><br>' + fillText(b.text));
   document.getElementById('truth-actions').style.display = 'none';
   document.getElementById('continue-btn').style.display = 'block';
   document.getElementById('cardEl').style.setProperty('--deckcolor','var(--gold)');
@@ -993,7 +1483,7 @@ function chooseAlt(){
     if(S.mode === 'mixed'){
       document.getElementById('card-cat').textContent = 'Fate says';
       document.getElementById('card-emoji').textContent = '🍺';
-      document.getElementById('card-text').innerHTML = '<span class="dare-tag">Take a sip</span><br>Fate chose the bottle. Down one sip, then pass on.';
+      setCardText('<span class="dare-tag">Take a sip</span><br>Fate chose the bottle. Down one sip, then pass on.');
       document.getElementById('truth-actions').style.display = 'none';
       document.getElementById('continue-btn').style.display = 'block';
       document.getElementById('cardEl').style.setProperty('--deckcolor','var(--wine)');
@@ -1003,11 +1493,13 @@ function chooseAlt(){
       nextTurn();
     }
   } else {
-    if(S.dares.length === 0) S.dares = shuffle(CONTENT.dares.q.slice());
-    const d = S.dares.pop();
+    if(!S.dares || S.dares.length === 0) S.dares = freshPile(dareList(), 8);
+    const dObj = S.dares.pop();
+    const d = esc(typeof dObj === 'string' ? dObj : dObj.text);
+    if(dObj && dObj.id) markSeen(dObj.id);
     document.getElementById('card-cat').textContent = S.mode==='mixed' ? 'Fate says' : 'Dare';
     document.getElementById('card-emoji').textContent = '🎭';
-    document.getElementById('card-text').innerHTML = '<span class="dare-tag">Your dare</span><br>' + d;
+    setCardText('<span class="dare-tag">Your dare</span><br>' + d);
     document.getElementById('truth-actions').style.display = 'none';
     document.getElementById('continue-btn').style.display = 'block';
     document.getElementById('cardEl').style.setProperty('--deckcolor','var(--wine)');
