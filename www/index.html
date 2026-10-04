@@ -337,7 +337,7 @@
 <script>
 /* ============ BILLING ============
    Bridge to native Android via Capacitor plugin OR Android JS Interface.
-   In closed testing, all purchases are FREE (Google test flow).
+   Native side: BillingBridge.java (exposed as window.Android).
    ================================================== */
 
 const PREMIUM_DECKS = {
@@ -350,13 +350,13 @@ const PREMIUM_DECKS = {
 let _unlockedDecks = {};
 (function loadUnlocked(){
   try {
-    const raw = localStorage.getItem('tos_unlocked_v1');
+    const raw = localStorage.getItem('tos_unlocked_v2');
     if (raw) _unlockedDecks = JSON.parse(raw);
   } catch(e) {}
 })();
 
 function saveUnlocked() {
-  try { localStorage.setItem('tos_unlocked_v1', JSON.stringify(_unlockedDecks)); } catch(e) {}
+  try { localStorage.setItem('tos_unlocked_v2', JSON.stringify(_unlockedDecks)); } catch(e) {}
 }
 
 function isDeckUnlocked(catKey) {
@@ -386,11 +386,44 @@ window.onPurchaseSuccess = function(productId) {
   _pendingPurchaseCat = null;
 };
 
-// Called by native Android layer if purchase fails or is cancelled
+// Called by native when the user already owns a deck (reinstall, new phone, retry after a failed acknowledge)
+window.onPurchaseRestored = function(productId) {
+  Object.entries(PREMIUM_DECKS).forEach(([key, deck]) => {
+    if (deck.productId === productId && !isDeckUnlocked(key)) unlockDeck(key);
+  });
+  try { if (document.getElementById('catGrid')) renderCategories(); } catch(e) {}
+};
+
+// Called by native if purchase fails or is cancelled
 window.onPurchaseFailed = function(reason) {
   closePurchaseModal();
   _pendingPurchaseCat = null;
+  if (reason === 'cancelled') return;
+  showToast(reason === 'pending'
+    ? 'Payment is pending. The deck unlocks as soon as it clears.'
+    : "Couldn't complete the purchase. Please try again.");
 };
+
+function isNativeApp() {
+  const c = window.Capacitor;
+  try {
+    return !!(c && ((typeof c.isNativePlatform === 'function' && c.isNativePlatform()) ||
+                    (typeof c.getPlatform === 'function' && c.getPlatform() !== 'web')));
+  } catch(e) { return false; }
+}
+
+function showToast(msg) {
+  const old = document.getElementById('tos-toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.id = 'tos-toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;left:16px;right:16px;bottom:calc(28px + env(safe-area-inset-bottom,0px));z-index:9999;' +
+    'max-width:420px;margin:0 auto;padding:14px 18px;border-radius:14px;background:#F7ECE4;color:#0E0710;' +
+    "font:700 14px/1.35 'Karla',sans-serif;text-align:center;box-shadow:0 8px 24px rgba(0,0,0,.5);";
+  document.body.appendChild(t);
+  setTimeout(() => { if (t.parentNode) t.remove(); }, 3500);
+}
 
 let _pendingPurchaseCat = null;
 
@@ -422,10 +455,14 @@ function confirmPurchase() {
       window.TruthOrSipBilling.launchPurchase({ productId: deck.productId });
     } else if (window.Android && typeof window.Android.launchPurchase === 'function') {
       window.Android.launchPurchase(deck.productId);
-    } else {
-      // Dev/browser fallback — simulate unlock for testing
-      console.warn('[Billing] No billing bridge found — simulating unlock for:', deck.productId);
+    } else if (!isNativeApp()) {
+      // Plain browser (development only) — simulate an unlock so the UI can be tested.
+      console.warn('[Billing] No billing bridge in browser — simulating unlock for:', deck.productId);
       window.onPurchaseSuccess(deck.productId);
+    } else {
+      // Inside the installed app but the billing bridge is missing: fail safe, never unlock for free.
+      console.error('[Billing] Native billing bridge not available');
+      window.onPurchaseFailed('billing_unavailable');
     }
   } catch(e) {
     console.error('[Billing] Purchase error:', e);
@@ -1638,6 +1675,7 @@ try{
 
 /* ============ INIT ============ */
 renderPlayers();
+try { if (window.Android && typeof window.Android.restorePurchases === 'function') window.Android.restorePurchases(); } catch(e) {}
 if(!restoreSession()){
   // fresh start
 }
