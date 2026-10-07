@@ -83,19 +83,35 @@
   .pill.sel{border-color:var(--gold);color:var(--gold);}
   .setup-warn{color:var(--wine);font-weight:700;font-size:13.5px;text-align:center;margin:10px 0 0;min-height:1px;}
 
-  /* ---------- CATEGORY SELECT ---------- */
-  .cat-grid{display:grid;gap:12px;margin-top:16px;}
-  .cat{position:relative;border-radius:var(--radius);padding:16px 18px;cursor:pointer;border:none;text-align:left;
-    background:var(--ink-2);border:1px solid rgba(247,236,228,.1);color:var(--cream);display:flex;align-items:center;gap:14px;}
-  .cat.sel{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold);}
-  .cat .cemoji{font-size:30px;flex:none;}
-  .cat h3{font-family:'Anton';font-size:20px;text-transform:uppercase;letter-spacing:.02em;}
-  .cat p{font-weight:600;font-size:13px;color:var(--muted);margin-top:2px;}
-  .cat .lock{position:absolute;top:12px;right:14px;font-size:10.5px;font-weight:800;letter-spacing:.1em;
-    text-transform:uppercase;padding:4px 9px;border-radius:999px;background:var(--wine-deep);color:#fff;}
-  .cat .check{position:absolute;top:14px;right:14px;font-size:18px;color:var(--gold);display:none;}
-  .cat.sel .check{display:block;}
-  .cat.sel .lock{display:none;}
+  /* ---------- TOPIC PICKER (v1.8) ---------- */
+  .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+  .topic{position:relative;height:132px;border:none;border-radius:22px;padding:13px 13px 12px;cursor:pointer;
+    display:flex;flex-direction:column;justify-content:flex-end;text-align:left;overflow:hidden;color:var(--cream);
+    box-shadow:0 8px 18px rgba(0,0,0,.35);font-family:'Karla',sans-serif;}
+  .topic::after{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.10);pointer-events:none;}
+  .topic .temoji{position:absolute;left:13px;top:9px;font-size:40px;line-height:1.1;}
+  .topic h3{font-family:'Anton';font-size:20px;line-height:1;text-transform:uppercase;letter-spacing:.01em;white-space:nowrap;}
+  .topic p{font-weight:700;font-size:12.5px;line-height:1.25;margin-top:4px;opacity:.92;}
+  .topic.sel{outline:3px solid var(--gold);outline-offset:-3px;box-shadow:0 0 0 3px rgba(245,184,65,.25),0 8px 18px rgba(0,0,0,.35);}
+  .topic .chk{position:absolute;right:11px;top:11px;width:26px;height:26px;border-radius:50%;background:var(--gold);color:#2a1220;
+    font:800 15px/26px 'Karla';text-align:center;z-index:2;display:none;}
+  .topic.sel .chk{display:block;}
+  .topic .tbadge{position:absolute;right:10px;top:11px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+    padding:4px 9px;border-radius:999px;background:rgba(14,7,16,.62);color:#fff;white-space:nowrap;}
+  .topic.sel .tbadge{top:42px;}
+  .topic .tage{position:absolute;right:10px;top:38px;z-index:2;font-size:10px;font-weight:800;letter-spacing:.06em;padding:3px 8px;border-radius:999px;background:var(--wine);color:#fff;}
+  .topic.sel .tage{top:70px;}
+  .topic.t1{background:linear-gradient(150deg,#F5B841,#D9822B);color:#2a1220;}
+  .topic.t2{background:linear-gradient(150deg,#7a35b5,#2a1048);}
+  .topic.t3{background:linear-gradient(150deg,#1fa38a,#0b3a3a);}
+  .topic.t4{background:linear-gradient(150deg,#E4405F,#7A1F3D);}
+  .topic.t5{background:linear-gradient(150deg,#FF7A3D,#B3261E);}
+  .topic.t6{background:linear-gradient(150deg,#42176b,#12051f);}
+  .surprise{margin-top:12px;width:100%;border:2px dashed rgba(245,184,65,.6);border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:12px;
+    background:rgba(245,184,65,.06);color:var(--cream);cursor:pointer;text-align:left;font-family:'Karla',sans-serif;}
+  .surprise .semoji{font-size:26px;}
+  .surprise b{display:block;font:400 18px 'Anton';letter-spacing:.03em;text-transform:uppercase;color:var(--gold);}
+  .surprise span.sub{font-weight:600;font-size:12.5px;color:var(--muted);}
 
   /* ---------- PASS ---------- */
   #pass{justify-content:center;text-align:center;}
@@ -183,6 +199,24 @@
   #purchaseModal .modal-card .price-tag{font-family:'Anton';font-size:32px;color:var(--gold);margin:6px 0 4px;}
   #purchaseModal .modal-card .price-sub{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:18px;}
   #purchaseModal .modal-card .deck-emoji{font-size:40px;margin-bottom:6px;}
+
+  /* ---------- UNLOCK SHEET (v1.8) ---------- */
+  #purchaseModal{align-items:flex-end;padding:0;}
+  #purchaseModal .modal-card.sheet{max-width:430px;border-radius:30px 30px 0 0;border-bottom:none;text-align:left;
+    padding:14px 22px calc(22px + env(safe-area-inset-bottom,0px));}
+  .sheet .handle{width:44px;height:5px;border-radius:3px;background:rgba(247,236,228,.25);margin:0 auto 16px;}
+  .sheet .sheet-head{display:flex;gap:14px;align-items:center;margin-bottom:6px;}
+  .sheet .sheet-em{width:62px;height:62px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:34px;flex:none;
+    background:linear-gradient(150deg,#E4405F,#7A1F3D);}
+  #purchaseModal .sheet h3{font-size:26px;line-height:1;}
+  #purchaseModal .sheet .sheet-desc{margin:5px 0 0;font-size:13.5px;line-height:1.35;}
+  #purchaseModal .sheet .btn{margin-top:12px;padding:15px 20px;font-size:18px;}
+  #purchaseModal .sheet .btn.buy{margin-top:16px;}
+  #purchaseModal .sheet .btn.adbtn{background:transparent;color:var(--cream);border:2px solid rgba(247,236,228,.35);box-shadow:none;}
+  #purchaseModal .sheet .btn.adbtn small{display:block;font:700 12px 'Karla';letter-spacing:.02em;text-transform:none;color:var(--muted);margin-top:3px;}
+  #purchaseModal .sheet .btn.adbtn[disabled]{opacity:.6;}
+  #purchaseModal .sheet .sheet-note{text-align:center;font-size:12px;font-weight:600;color:var(--muted);margin:12px 0 0;}
+  .sheet-close{display:block;margin:10px auto 0;background:none;border:none;color:var(--muted);font:800 14px 'Karla';cursor:pointer;padding:8px 16px;}
 </style>
 </head>
 <body>
@@ -250,10 +284,11 @@
 
   <!-- CATEGORY SELECT -->
   <section class="screen" id="categories">
-    <p class="eyebrow">Pick your topics</p>
-    <h2 style="font-size:30px;margin-top:6px;">What's on the table?</h2>
+    <p class="eyebrow">What's on the table?</p>
+    <h2 style="font-size:38px;margin-top:6px;line-height:1;">Pick your topics</h2>
     <p class="setup-hint">Tap to toggle. Mix as many as you like.</p>
     <div class="cat-grid" id="catGrid"></div>
+    <button class="surprise" onclick="surpriseMe()"><span class="semoji">🎲</span><div><b>Surprise me</b><span class="sub">A random mix of your unlocked topics</span></div></button>
     <div style="height:14px"></div>
     <p class="setup-warn" id="cat-warn"></p>
     <button class="btn" onclick="startGame()">Let's Go 🍸</button>
@@ -317,18 +352,18 @@
     </div>
   </div>
 
-  <!-- PURCHASE MODAL -->
-  <div class="modal-overlay" id="purchaseModal">
-    <div class="modal-card">
-      <div class="deck-emoji" id="purchase-emoji">💔</div>
-      <h3 id="purchase-name">Love & Exes Deck</h3>
-      <div class="price-tag" id="purchase-price">KES 200</div>
-      <p class="price-sub">One-time purchase · Unlocks forever</p>
-      <p id="purchase-desc" style="color:var(--muted);font-weight:600;font-size:13.5px;margin-bottom:18px;line-height:1.5;"></p>
-      <div class="modal-actions">
-        <button class="btn wine" id="purchase-btn" onclick="confirmPurchase()">Unlock Now</button>
-        <button class="btn ghost" onclick="closePurchaseModal()">Maybe later</button>
+  <!-- UNLOCK SHEET (buy or watch an ad) -->
+  <div class="modal-overlay" id="purchaseModal" onclick="if(event.target===this)closePurchaseModal()">
+    <div class="modal-card sheet">
+      <div class="handle"></div>
+      <div class="sheet-head">
+        <div class="sheet-em" id="purchase-emoji">💔</div>
+        <div><h3 id="purchase-name">Love & Exes</h3><p class="sheet-desc" id="purchase-desc"></p></div>
       </div>
+      <button class="btn buy" id="purchase-btn" onclick="confirmPurchase()">Unlock for good</button>
+      <button class="btn adbtn" id="ad-btn" onclick="watchAdForDeck()">▶ Watch an ad<small id="ad-sub">Unlocks this topic for 24 hours</small></button>
+      <p class="sheet-note" id="sheet-note">Ads are optional. Purchases never expire.</p>
+      <button class="sheet-close" onclick="closePurchaseModal()">Not now</button>
     </div>
   </div>
 
@@ -359,9 +394,27 @@ function saveUnlocked() {
   try { localStorage.setItem('tos_unlocked_v2', JSON.stringify(_unlockedDecks)); } catch(e) {}
 }
 
+/* ---- Rewarded-ad unlocks: one ad = one topic for 24 hours (per phone) ---- */
+const AD_UNLOCK_MS = 24 * 60 * 60 * 1000;
+const AD_UNLOCK_KEY = 'tos_adunlock_v1';
+let _adUnlocks = {};
+try { _adUnlocks = JSON.parse(localStorage.getItem(AD_UNLOCK_KEY) || '{}') || {}; } catch(e) { _adUnlocks = {}; }
+function saveAdUnlocks() { try { localStorage.setItem(AD_UNLOCK_KEY, JSON.stringify(_adUnlocks)); } catch(e) {} }
+
+function adTimeLeft(catKey) {
+  const t = _adUnlocks[catKey];
+  if (!t) return 0;
+  const left = t - Date.now();
+  // Phone clock moved backwards after unlocking: drop the unlock instead of extending it.
+  if (left > AD_UNLOCK_MS + 60000) { delete _adUnlocks[catKey]; saveAdUnlocks(); return 0; }
+  return Math.max(0, left);
+}
+
+function isDeckOwned(catKey) { return !PREMIUM_DECKS[catKey] || !!_unlockedDecks[catKey]; }
+
 function isDeckUnlocked(catKey) {
   if (!PREMIUM_DECKS[catKey]) return true; // free deck
-  return !!_unlockedDecks[catKey];
+  return !!_unlockedDecks[catKey] || adTimeLeft(catKey) > 0;
 }
 
 function unlockDeck(catKey) {
@@ -427,21 +480,85 @@ function showToast(msg) {
 
 let _pendingPurchaseCat = null;
 
+function adsAvailable() {
+  if (window.AndroidAds && typeof window.AndroidAds.showRewardedAd === 'function') return true;
+  return !isNativeApp(); // plain browser: simulated ad for testing
+}
+
+let _adBusy = false;
+function resetAdBtn() {
+  const b = document.getElementById('ad-btn');
+  if (!b) return;
+  b.disabled = false;
+  b.innerHTML = '▶ Watch an ad<small id="ad-sub">Unlocks this topic for 24 hours</small>';
+}
+
 function openPurchaseModal(catKey) {
   const deck = PREMIUM_DECKS[catKey];
   if (!deck) return;
   _pendingPurchaseCat = catKey;
+  _adBusy = false;
+  const c = (typeof CONTENT !== 'undefined' && CONTENT.categories[catKey]) || {};
+  const label = c.name || deck.name;
   document.getElementById('purchase-emoji').textContent = deck.emoji;
-  document.getElementById('purchase-name').textContent = deck.name;
-  document.getElementById('purchase-price').textContent = deck.price;
-  document.getElementById('purchase-desc').textContent = deck.desc;
+  document.getElementById('purchase-name').textContent = label;
+  document.getElementById('purchase-desc').textContent = (c.q ? c.q.length + ' cards \u00b7 ' : '') + (c.desc || deck.desc);
+  document.getElementById('purchase-btn').textContent = 'Unlock for good \u00b7 ' + deck.price;
+  const showAd = adsAvailable();
+  document.getElementById('ad-btn').style.display = showAd ? '' : 'none';
+  document.getElementById('sheet-note').textContent = showAd
+    ? 'Ads are optional. Purchases never expire.' : 'One-time purchase. Unlocks forever.';
+  resetAdBtn();
+  if (showAd) document.getElementById('ad-sub').textContent = 'Unlocks ' + label + ' for 24 hours';
   document.getElementById('purchaseModal').classList.add('show');
 }
 
 function closePurchaseModal() {
   document.getElementById('purchaseModal').classList.remove('show');
   _pendingPurchaseCat = null;
+  _adBusy = false;
 }
+
+/* ---- watch an ad -> unlock that one topic for 24h ---- */
+function watchAdForDeck() {
+  const key = _pendingPurchaseCat;
+  if (!key || _adBusy) return;
+  _adBusy = true;
+  const b = document.getElementById('ad-btn');
+  b.disabled = true; b.innerHTML = 'Loading ad\u2026';
+  try {
+    if (window.AndroidAds && typeof window.AndroidAds.showRewardedAd === 'function') {
+      window.AndroidAds.showRewardedAd(key);
+    } else if (!isNativeApp()) {
+      console.warn('[Ads] Plain browser: simulating a rewarded ad for', key);
+      setTimeout(() => window.onAdRewarded(key), 900);
+    } else {
+      window.onAdFailed('unavailable');
+    }
+  } catch(e) { console.error('[Ads] error', e); window.onAdFailed('error'); }
+}
+
+// Called by native when the player has watched the whole ad
+window.onAdRewarded = function(catKey) {
+  _adBusy = false;
+  if (!PREMIUM_DECKS[catKey]) return;
+  _adUnlocks[catKey] = Date.now() + AD_UNLOCK_MS;
+  saveAdUnlocks();
+  closePurchaseModal();
+  if (!S.cats.includes(catKey)) S.cats.push(catKey);
+  try { if (document.getElementById('catGrid')) renderCategories(); } catch(e) {}
+  const c = CONTENT.categories[catKey];
+  showToast((c ? c.name : 'Topic') + ' unlocked for 24 hours \ud83c\udf89');
+};
+
+// Called by native when no ad could be shown
+window.onAdFailed = function(reason) {
+  _adBusy = false;
+  resetAdBtn();
+  showToast(reason === 'dismissed' ? 'Watch the whole ad to unlock the topic.'
+          : reason === 'no_fill'   ? 'No ad available right now. Try again in a minute.'
+          : "Couldn't load an ad. Check your connection and try again.");
+};
 
 function confirmPurchase() {
   const catKey = _pendingPurchaseCat;
@@ -1245,35 +1362,54 @@ function goCategories(){
   renderCategories();
   go('categories');
 }
+const TILE_CLASS = { warmup:'t1', confessions:'t2', moneymatters:'t3', loveandexes:'t4', friendsroast:'t5', spicy:'t6' };
+function leftLabel(ms){
+  const hrs = Math.ceil(ms / 3600000);
+  return ms < 3600000 ? '\u23f3 <1h left' : '\u23f3 ' + hrs + 'h left';
+}
 function renderCategories(){
+  S.cats = S.cats.filter(k => CONTENT.categories[k] && isDeckUnlocked(k));
+  if(S.cats.length === 0){
+    Object.entries(CONTENT.categories).forEach(([key,c])=>{ if(c.tier==='free') S.cats.push(key); });
+  }
   const grid = document.getElementById('catGrid');
   grid.innerHTML = "";
   Object.entries(CONTENT.categories).forEach(([key, c]) => {
+    const locked = !!PREMIUM_DECKS[key] && !isDeckUnlocked(key);
+    const timed  = !!PREMIUM_DECKS[key] && !isDeckOwned(key) && !locked;
     const el = document.createElement('button');
-    el.className = 'cat' + (S.cats.includes(key) ? ' sel' : '');
+    el.className = 'topic ' + (TILE_CLASS[key] || 't1') + (S.cats.includes(key) ? ' sel' : '') + (locked ? ' locked' : '');
     el.onclick = () => toggleCat(key, el);
-    el.innerHTML = `<span class="cemoji">${c.emoji}</span>
+    el.innerHTML = `<span class="temoji">${c.emoji}</span>
       <div><h3>${c.name}</h3><p>${c.desc}</p></div>
-      ${c.tier==='premium' && !isDeckUnlocked(key) ? '<span class="lock">Premium</span>' : ''}
-      <span class="check">✓</span>`;
+      ${locked ? '<span class="tbadge">\ud83d\udd12 Premium</span>' : ''}
+      ${timed ? '<span class="tbadge">' + leftLabel(adTimeLeft(key)) + '</span>' : ''}
+      ${key==='spicy' ? '<span class="tage">18+</span>' : ''}
+      <span class="chk">\u2713</span>`;
     grid.appendChild(el);
   });
-  if(S.cats.length === 0){
-    Object.entries(CONTENT.categories).forEach(([key,c])=>{ if(c.tier==='free') S.cats.push(key); });
-    renderCategories();
-  }
 }
 function toggleCat(key, el){
-    // If premium and not unlocked, show purchase modal instead
-    if (PREMIUM_DECKS[key] && !isDeckUnlocked(key)) {
-      openPurchaseModal(key);
-      return;
-    }
-    const i = S.cats.indexOf(key);
-    if(i>=0){ S.cats.splice(i,1); el.classList.remove('sel'); }
-    else { S.cats.push(key); el.classList.add('sel'); }
-    document.getElementById('cat-warn').textContent = "";
+  // Locked premium topic: offer buy / watch an ad instead
+  if (PREMIUM_DECKS[key] && !isDeckUnlocked(key)) {
+    openPurchaseModal(key);
+    return;
   }
+  const i = S.cats.indexOf(key);
+  if(i>=0){ S.cats.splice(i,1); el.classList.remove('sel'); }
+  else { S.cats.push(key); el.classList.add('sel'); }
+  document.getElementById('cat-warn').textContent = "";
+}
+function surpriseMe(){
+  const keys = Object.keys(CONTENT.categories).filter(k => isDeckUnlocked(k));
+  if(keys.length === 0) return;
+  const mix = shuffle(keys.slice());
+  const n = Math.min(mix.length, 2 + Math.floor(Math.random()*2));
+  S.cats = mix.slice(0, n);
+  renderCategories();
+  document.getElementById('cat-warn').textContent = "";
+  showToast('Tonight: ' + S.cats.map(k => CONTENT.categories[k].name).join(' + '));
+}
 
 /* ============ SCORES ============ */
 function initScores(){
@@ -1421,6 +1557,7 @@ function groupHTML(g){
   return tag(esc(currentPlayer()) + ' is on the spot') + fillText(g.t);
 }
 function startGame(){
+  S.cats = S.cats.filter(k => isDeckUnlocked(k));
   if(S.cats.length === 0){ document.getElementById('cat-warn').textContent = "Pick at least one topic."; return; }
   buildPool();
   initScores();
