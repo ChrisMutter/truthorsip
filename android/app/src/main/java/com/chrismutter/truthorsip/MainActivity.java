@@ -10,6 +10,7 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
         getBridge().getWebView().addJavascriptInterface(
                 new BillingBridge(this, getBridge().getWebView()), "Android");
+        getBridge().getWebView().addJavascriptInterface(
+                new AdBridge(this, getBridge().getWebView()), "AndroidAds");
     }
 }
-
