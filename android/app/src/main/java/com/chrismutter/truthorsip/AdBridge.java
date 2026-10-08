@@ -25,7 +25,7 @@ public class AdBridge {
     private static final String TAG = "AdBridge";
 
     // Flip to false (or leave true until you're ready) -- true = Google's test ad, safe to click.
-    private static final boolean USE_TEST_ADS = true;
+    private static final boolean USE_TEST_ADS = false;
     private static final String TEST_UNIT = "ca-app-pub-3940256099942544/5224354917";
     private static final String REAL_UNIT = "ca-app-pub-5662091650537711/2193122834";
 
