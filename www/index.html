@@ -44,6 +44,14 @@
   .btn.ghost{background:transparent;color:var(--muted);box-shadow:none;font-family:'Karla';
     font-weight:700;font-size:14px;letter-spacing:.06em;padding:12px;}
   .btn.wine{background:var(--wine);color:#fff;}
+  .btn.ghost.share{color:var(--cream);font-size:15px;}
+  #notices{position:absolute;top:12px;left:14px;right:14px;display:flex;flex-direction:column;gap:8px;z-index:5;}
+  .notice{display:flex;align-items:center;gap:10px;background:var(--ink-2);border:1px solid rgba(245,184,65,.45);border-radius:16px;padding:10px 8px 10px 12px;text-align:left;box-shadow:0 8px 20px rgba(0,0,0,.4);}
+  .notice .n-ic{font-size:22px;line-height:1;}
+  .notice .n-tx{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.35;color:var(--muted);}
+  .notice .n-tx b{color:var(--cream);font-size:14px;}
+  .notice .n-btn{border:none;border-radius:999px;background:var(--gold);color:var(--ink);font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:14px;padding:9px 14px;cursor:pointer;}
+  .notice .n-x{border:none;background:transparent;color:var(--muted);font-size:16px;padding:6px;cursor:pointer;}
 
   /* ---------- TITLE ---------- */
   #title{justify-content:center;text-align:center;}
@@ -81,6 +89,8 @@
   .pill{flex:1;padding:13px;border-radius:14px;border:2px solid rgba(247,236,228,.14);background:var(--ink-2);
     color:var(--muted);font-weight:800;font-size:15px;cursor:pointer;text-align:center;}
   .pill.sel{border-color:var(--gold);color:var(--gold);}
+  .pill.mode{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:14px 6px;}
+  .pill.mode .mi{font-size:26px;line-height:1;}
   .setup-warn{color:var(--wine);font-weight:700;font-size:13.5px;text-align:center;margin:10px 0 0;min-height:1px;}
 
   /* ---------- TOPIC PICKER (v1.8) ---------- */
@@ -224,11 +234,13 @@
 
   <!-- TITLE -->
   <section class="screen active" id="title">
+    <div id="notices"></div>
     <div class="glass">🍸</div>
     <div class="logo">Truth<span class="amp">or</span>Sip</div>
     <p class="tagline">Spill it or take a sip.<br>The adult party game made in 254.</p>
     <div style="height:34px"></div>
     <button class="btn wine" onclick="go('agegate')">Start</button>
+    <button class="btn ghost share" onclick="challengeFriend()">📲 Challenge a friend</button>
     <p class="footer-note">18+ · Play responsibly · v0.2</p>
   </section>
 
@@ -261,9 +273,9 @@
     <div class="field">
       <label>Mode</label>
       <div class="pillrow">
-        <div class="pill sel" id="modeMixed" onclick="setMode('mixed')">🎲 Mixed</div>
-        <div class="pill" id="modeSips" onclick="setMode('sips')">🍺 Sips</div>
-        <div class="pill" id="modeDare" onclick="setMode('dare')">🎭 Dry</div>
+        <div class="pill mode" id="modeSips" onclick="setMode('sips')"><span class="mi">🍺</span>Sips</div>
+        <div class="pill mode sel" id="modeMixed" onclick="setMode('mixed')"><span class="mi">🎲</span>Mixed</div>
+        <div class="pill mode" id="modeDare" onclick="setMode('dare')"><span class="mi">🎭</span>Dares</div>
       </div>
     </div>
 
@@ -347,6 +359,7 @@
       <p>You'll go back to pick topics. Your players stay — only the current round ends.</p>
       <div class="modal-actions">
         <button class="btn wine" onclick="confirmQuit()">Change topics</button>
+        <button class="btn ghost share" onclick="challengeFriend()">📲 Challenge a friend</button>
         <button class="btn ghost" onclick="closeQuit()">Keep playing</button>
       </div>
     </div>
@@ -464,6 +477,61 @@ function isNativeApp() {
                     (typeof c.getPlatform === 'function' && c.getPlatform() !== 'web')));
   } catch(e) { return false; }
 }
+
+/* ============ CHALLENGE A FRIEND ============ */
+const PLAY_LINK = 'https://play.google.com/store/apps/details?id=com.chrismutter.truthorsip&referrer=utm_source%3Dshare%26utm_medium%3Dwhatsapp%26utm_campaign%3Dchallenge';
+function challengeFriend(){
+  const msg = "🍸 I dare you to play Truth or Sip with me. Answer the question… or take a sip. Kenya's party game, 18+.\n" + PLAY_LINK;
+  try { window.location.href = 'https://wa.me/?text=' + encodeURIComponent(msg); }
+  catch(e){ showToast('Could not open WhatsApp'); }
+}
+
+// ---- Update prompt + What's new (native bridge: window.AndroidUpdate) ----
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function removeNotice(id){ const n=document.getElementById(id); if(n) n.remove(); }
+function addNotice(id, icon, title, text, btnLabel, onBtn, onClose){
+  const box=document.getElementById('notices'); if(!box) return;
+  removeNotice(id);
+  const c=document.createElement('div'); c.className='notice'; c.id=id;
+  const ic=document.createElement('div'); ic.className='n-ic'; ic.textContent=icon;
+  const tx=document.createElement('div'); tx.className='n-tx';
+  const t=document.createElement('b'); t.textContent=title;
+  const p=document.createElement('span'); p.textContent=text;
+  tx.append(t,p); c.append(ic,tx);
+  if(btnLabel){ const b=document.createElement('button'); b.className='n-btn'; b.textContent=btnLabel; b.onclick=onBtn; c.append(b); }
+  const x=document.createElement('button'); x.className='n-x'; x.textContent='\u2715'; x.setAttribute('aria-label','Dismiss');
+  x.onclick=function(){ removeNotice(id); if(onClose) onClose(); };
+  c.append(x); box.appendChild(c);
+}
+window.onUpdateAvailable = function(code){
+  code = parseInt(code,10) || 0;
+  const until = parseInt(lsGet('tos_upd_snooze_'+code) || '0', 10);
+  if(Date.now() < until) return;
+  addNotice('n-upd','\u2B06\uFE0F','Update available','New features and fixes are ready.','Update',
+    function(){ try{ window.AndroidUpdate.startUpdate(); }catch(e){} removeNotice('n-upd'); showToast('Downloading update\u2026'); },
+    function(){ lsSet('tos_upd_snooze_'+code, String(Date.now() + 3*24*3600*1000)); });
+};
+window.onUpdateDownloaded = function(){
+  addNotice('n-upd','\u2705','Update ready','Restart the app to finish updating.','Restart',
+    function(){ try{ window.AndroidUpdate.completeUpdate(); }catch(e){} });
+};
+window.onWhatsNew = function(raw){
+  try{
+    const d = JSON.parse(raw);
+    const id = String(d.id || '').slice(0,40);
+    if(!id || !d.message) return;
+    if(lsGet('tos_whatsnew_seen') === id) return;
+    addNotice('n-new','\uD83C\uDF89', String(d.title || "What's new").slice(0,40), String(d.message).slice(0,160), null, null,
+      function(){ lsSet('tos_whatsnew_seen', id); });
+  }catch(e){}
+};
+function checkUpdates(){
+  if(!window.AndroidUpdate) return;
+  try{ window.AndroidUpdate.check(); window.AndroidUpdate.fetchWhatsNew(); }catch(e){}
+}
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) checkUpdates(); });
+window.addEventListener('load', function(){ setTimeout(checkUpdates, 1200); });
 
 function showToast(msg) {
   const old = document.getElementById('tos-toast');
@@ -1351,7 +1419,7 @@ function setTimer(secs){
   document.getElementById('timer30').classList.toggle('sel', secs===30);
   document.getElementById('timer60').classList.toggle('sel', secs===60);
 }
-function modeChip(){ return S.mode==='mixed' ? '🎲 Mixed' : (S.mode==='sips' ? '🍺 Sips' : '🎭 Dry'); }
+function modeChip(){ return S.mode==='mixed' ? '🎲 Mixed' : (S.mode==='sips' ? '🍺 Sips' : '🎭 Dares'); }
 function altLabel(){ return S.mode==='sips' ? '🍺 Sip' : (S.mode==='dare' ? '🎭 Dare' : '🎲 Dodge'); }
 
 /* ============ CATEGORIES ============ */
