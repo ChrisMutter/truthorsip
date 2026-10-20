@@ -45,7 +45,10 @@
     font-weight:700;font-size:14px;letter-spacing:.06em;padding:12px;}
   .btn.wine{background:var(--wine);color:#fff;}
   .btn.ghost.share{color:var(--cream);font-size:15px;}
-  #notices{position:absolute;top:12px;left:14px;right:14px;display:flex;flex-direction:column;gap:8px;z-index:5;}
+  .linkrow{display:flex;justify-content:center;gap:10px;margin-top:6px}
+.lnk{background:none;border:0;color:var(--muted,#b9a9c9);font:600 14px Karla,sans-serif;padding:10px 12px;cursor:pointer}
+.lnk:active{opacity:.6}
+#notices{position:absolute;top:12px;left:14px;right:14px;display:flex;flex-direction:column;gap:8px;z-index:5;}
   .notice{display:flex;align-items:center;gap:10px;background:var(--ink-2);border:1px solid rgba(245,184,65,.45);border-radius:16px;padding:10px 8px 10px 12px;text-align:left;box-shadow:0 8px 20px rgba(0,0,0,.4);}
   .notice .n-ic{font-size:22px;line-height:1;}
   .notice .n-tx{flex:1;min-width:0;display:flex;flex-direction:column;font-size:13px;line-height:1.35;color:var(--muted);}
@@ -241,7 +244,11 @@
     <div style="height:34px"></div>
     <button class="btn wine" onclick="go('agegate')">Start</button>
     <button class="btn ghost share" onclick="challengeFriend()">📲 Challenge a friend</button>
-    <p class="footer-note">18+ · Play responsibly · v0.2</p>
+    <div class="linkrow">
+      <button class="lnk" onclick="rateUs()">⭐ Rate us</button>
+      <button class="lnk" onclick="contactUs()">✉️ Contact us</button>
+    </div>
+    <p class="footer-note">18+ · Play responsibly</p>
   </section>
 
   <!-- AGE GATE -->
@@ -484,6 +491,25 @@ function challengeFriend(){
   const msg = "🍸 I dare you to play Truth or Sip with me. Answer the question… or take a sip. Kenya's party game, 18+.\n" + PLAY_LINK;
   try { window.location.href = 'https://wa.me/?text=' + encodeURIComponent(msg); }
   catch(e){ showToast('Could not open WhatsApp'); }
+}
+
+
+// ---- Rating + feedback ----
+// Play policy: no questions before the review card, no gating by sentiment, never trigger it from a button.
+function rateUs(){ if(window.AndroidReview) AndroidReview.openStorePage(); else window.open(PLAY_LINK.split('&referrer')[0],'_blank'); }
+function contactUs(){ if(window.AndroidReview) AndroidReview.contactUs(); else showToast('Email support@YOURDOMAIN.com'); }
+function countTurn(){
+  const n = (parseInt(lsGet('tos_turns')||'0',10)||0)+1; lsSet('tos_turns', String(n));
+}
+function maybeAskReview(){
+  if(!window.AndroidReview) return;
+  const turns = parseInt(lsGet('tos_turns')||'0',10)||0;
+  const asked = parseInt(lsGet('tos_rev_count')||'0',10)||0;
+  const last  = parseInt(lsGet('tos_rev_last')||'0',10)||0;
+  const DAY = 86400000;
+  if(turns < 15 || asked >= 3 || Date.now()-last < 45*DAY) return;
+  lsSet('tos_rev_count', String(asked+1)); lsSet('tos_rev_last', String(Date.now()));
+  setTimeout(()=>{ try{ AndroidReview.requestReview(); }catch(e){} }, 600);
 }
 
 // ---- Update prompt + What's new (native bridge: window.AndroidUpdate) ----
@@ -1751,6 +1777,7 @@ function chooseAlt(){
   }
 }
 function nextTurn(){
+  countTurn();
   stopTimer();
   S.pIdx++;
   showPass();
@@ -1860,6 +1887,7 @@ function confirmQuit(){
   closeQuit();
   renderCategories();
   go('categories');
+  maybeAskReview();
 }
 
 /* ============ BACK BUTTON ============ */
