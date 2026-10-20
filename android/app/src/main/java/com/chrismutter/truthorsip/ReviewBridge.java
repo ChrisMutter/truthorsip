@@ -13,7 +13,7 @@ import com.google.android.gms.tasks.Task;
 /** Exposed to the web UI as window.AndroidReview. */
 public class ReviewBridge {
     // CHANGE THIS to your real support address before building.
-    private static final String CONTACT_EMAIL = "support@YOURDOMAIN.com";
+    private static final String CONTACT_EMAIL = "mutahichristopher@gmail.com";
     private static final String PKG = "com.chrismutter.truthorsip";
 
     private final Activity activity;
