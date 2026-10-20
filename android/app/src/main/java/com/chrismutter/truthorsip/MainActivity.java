@@ -14,5 +14,7 @@ public class MainActivity extends BridgeActivity {
                 new AdBridge(this, getBridge().getWebView()), "AndroidAds");
         getBridge().getWebView().addJavascriptInterface(
                 new UpdateBridge(this, getBridge().getWebView()), "AndroidUpdate");
+        getBridge().getWebView().addJavascriptInterface(
+                new ReviewBridge(this), "AndroidReview");
     }
 }
